@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *)rawBase64Encoded;
 - (NSString *)firstEightBytesRawBase64Encoded;
+- (NSData *)sha256Digest;
 
 @end
 

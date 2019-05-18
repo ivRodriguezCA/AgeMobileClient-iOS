@@ -18,6 +18,8 @@
  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#import <CommonCrypto/CommonCrypto.h>
+
 #import "NSData+Helper.h"
 
 @implementation NSData (Helper)
@@ -45,6 +47,17 @@
     NSRange range = NSMakeRange(0, 8);
     NSData *firstEightBytes = [self subdataWithRange:range];
     return [firstEightBytes rawBase64Encoded];
+}
+
+- (NSData *)sha256Digest {
+    if (self.length == 0) {
+        return [NSData data];
+    }
+    
+    uint8_t digestData[CC_SHA256_DIGEST_LENGTH];
+    CC_SHA256(self.bytes, (CC_LONG)self.length, digestData);
+    
+    return [NSData dataWithBytes:digestData length:CC_SHA256_DIGEST_LENGTH];
 }
 
 @end

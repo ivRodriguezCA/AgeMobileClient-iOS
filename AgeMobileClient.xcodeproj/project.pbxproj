@@ -13,11 +13,11 @@
 		39696EF2228FD90F003084BD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 39696EF1228FD90F003084BD /* Assets.xcassets */; };
 		39696EF5228FD90F003084BD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 39696EF3228FD90F003084BD /* LaunchScreen.storyboard */; };
 		39696EF8228FD90F003084BD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 39696EF7228FD90F003084BD /* main.m */; };
-		39696F02228FD90F003084BD /* AgeMobileClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 39696F01228FD90F003084BD /* AgeMobileClientTests.m */; };
 		39696F54228FE2D5003084BD /* libsodium.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 39696F53228FE2D5003084BD /* libsodium.a */; };
 		39696F57228FE4CB003084BD /* X25519Key.m in Sources */ = {isa = PBXBuildFile; fileRef = 39696F56228FE4CB003084BD /* X25519Key.m */; };
 		39696F5E228FED93003084BD /* NSData+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 39696F5D228FED93003084BD /* NSData+Helper.m */; };
 		39696F61228FF548003084BD /* NSString+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 39696F60228FF548003084BD /* NSString+Helper.m */; };
+		39696F642290910B003084BD /* X25519KeySpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 39696F632290910B003084BD /* X25519KeySpec.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,7 +42,6 @@
 		39696EF6228FD90F003084BD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		39696EF7228FD90F003084BD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		39696EFD228FD90F003084BD /* AgeMobileClientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AgeMobileClientTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		39696F01228FD90F003084BD /* AgeMobileClientTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgeMobileClientTests.m; sourceTree = "<group>"; };
 		39696F03228FD90F003084BD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		39696F15228FE2D5003084BD /* crypto_stream_salsa2012.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypto_stream_salsa2012.h; sourceTree = "<group>"; };
 		39696F16228FE2D5003084BD /* crypto_auth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypto_auth.h; sourceTree = "<group>"; };
@@ -112,6 +111,7 @@
 		39696F5D228FED93003084BD /* NSData+Helper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSData+Helper.m"; sourceTree = "<group>"; };
 		39696F5F228FF548003084BD /* NSString+Helper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Helper.h"; sourceTree = "<group>"; };
 		39696F60228FF548003084BD /* NSString+Helper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Helper.m"; sourceTree = "<group>"; };
+		39696F632290910B003084BD /* X25519KeySpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = X25519KeySpec.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,8 +172,8 @@
 		39696F00228FD90F003084BD /* AgeMobileClientTests */ = {
 			isa = PBXGroup;
 			children = (
-				39696F01228FD90F003084BD /* AgeMobileClientTests.m */,
 				39696F03228FD90F003084BD /* Info.plist */,
+				39696F632290910B003084BD /* X25519KeySpec.m */,
 			);
 			path = AgeMobileClientTests;
 			sourceTree = "<group>";
@@ -429,7 +429,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				39696F02228FD90F003084BD /* AgeMobileClientTests.m in Sources */,
+				39696F642290910B003084BD /* X25519KeySpec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -17,7 +17,6 @@
  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-#import <CommonCrypto/CommonCrypto.h>
 
 #import "X25519Key.h"
 #include "sodium.h"
@@ -27,6 +26,8 @@
 static NSString * const kCreatedAtText = @"# created: ";
 static NSString * const kPublicKeyText = @"# pubkey:";
 static NSString * const kPrivateKeyText = @"AGE_PRIVATE_KEY_";
+
+static NSUInteger const kCurve25519KeyLength = 32;
 
 @interface X25519Key ()
 
@@ -99,10 +100,26 @@ static NSString * const kPrivateKeyText = @"AGE_PRIVATE_KEY_";
         return [NSData data];
     }
     
-    uint8_t digestData[CC_SHA256_DIGEST_LENGTH];
-    CC_SHA256(self.publicKey.bytes, (CC_LONG)self.publicKey.length, digestData);
+    return [self.publicKey sha256Digest];
+}
+
+- (NSUInteger)keyLength {
+    return kCurve25519KeyLength;
+}
+
+- (NSData * _Nullable)sharedSecretFrom:(X25519Key *)x25519Key publicKey:(NSData *)x25519PublicKey {
+    NSUInteger keyLength = [x25519Key keyLength];
+    if (x25519PublicKey.length != keyLength) {
+        return nil;
+    }
     
-    return [NSData dataWithBytes:digestData length:CC_SHA256_DIGEST_LENGTH];
+    unsigned char scalarmult_q[crypto_scalarmult_BYTES];
+    
+    if (crypto_scalarmult(scalarmult_q, x25519Key.privateKey.bytes, x25519PublicKey.bytes) != 0) {
+        return nil;
+    }
+    
+    return [NSData dataWithBytes:scalarmult_q length:crypto_scalarmult_BYTES];
 }
 
 - (NSString *)description {
@@ -111,6 +128,17 @@ static NSString * const kPrivateKeyText = @"AGE_PRIVATE_KEY_";
     NSString *line3 = [NSString stringWithFormat:@"%@%@", kPrivateKeyText, [self privateKeyString]];
     
     return [NSString stringWithFormat:@"%@%@%@", line1, line2, line3];
+}
+
+- (BOOL)isEqual:(id)object {
+    if (![object isKindOfClass:[self class]]) {
+        return NO;
+    }
+    
+    X25519Key *keyObject = object;
+    
+    return [self.publicKey isEqualToData:keyObject.publicKey] &&
+    [self.privateKey isEqualToData:keyObject.privateKey];
 }
 
 #pragma mark - Private
