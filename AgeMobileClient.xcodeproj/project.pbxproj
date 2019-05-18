@@ -81,6 +81,9 @@
 		39696EE7228FD90E003084BD /* AgeMobileClient */ = {
 			isa = PBXGroup;
 			children = (
+				39696F10228FD968003084BD /* Models */,
+				39696F0F228FD95F003084BD /* Views */,
+				39696F0E228FD958003084BD /* Controllers */,
 				39696EE8228FD90E003084BD /* AppDelegate.h */,
 				39696EE9228FD90E003084BD /* AppDelegate.m */,
 				39696EEB228FD90E003084BD /* ViewController.h */,
@@ -101,6 +104,27 @@
 				39696F03228FD90F003084BD /* Info.plist */,
 			);
 			path = AgeMobileClientTests;
+			sourceTree = "<group>";
+		};
+		39696F0E228FD958003084BD /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		39696F0F228FD95F003084BD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		39696F10228FD968003084BD /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
