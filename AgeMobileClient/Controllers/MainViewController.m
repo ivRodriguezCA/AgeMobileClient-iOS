@@ -19,7 +19,6 @@
  */
 
 #import "MainViewController.h"
-#import "X25519Key.h"
 
 @interface MainViewController ()
 
@@ -29,12 +28,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    X25519Key *key = [X25519Key new];
-    NSLog(@"\nOriginal Key:\n%@", key);
-    
-    X25519Key *key2 = [[X25519Key alloc] initFromDisk:[key description]];
-    NSLog(@"\nParsed Key:\n%@", key2);
 }
 
 @end

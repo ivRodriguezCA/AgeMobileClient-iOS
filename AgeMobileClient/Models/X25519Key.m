@@ -107,15 +107,15 @@ static NSUInteger const kCurve25519KeyLength = 32;
     return kCurve25519KeyLength;
 }
 
-- (NSData * _Nullable)sharedSecretFrom:(X25519Key *)x25519Key publicKey:(NSData *)x25519PublicKey {
-    NSUInteger keyLength = [x25519Key keyLength];
+- (NSData * _Nullable)sharedSecretWithPublicKey:(NSData *)x25519PublicKey {
+    NSUInteger keyLength = [self keyLength];
     if (x25519PublicKey.length != keyLength) {
         return nil;
     }
     
     unsigned char scalarmult_q[crypto_scalarmult_BYTES];
     
-    if (crypto_scalarmult(scalarmult_q, x25519Key.privateKey.bytes, x25519PublicKey.bytes) != 0) {
+    if (crypto_scalarmult(scalarmult_q, self.privateKey.bytes, x25519PublicKey.bytes) != 0) {
         return nil;
     }
     

@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initFromDisk:(NSString *)keyString;
 - (NSData *)publicKeySHA256;
 - (NSUInteger)keyLength;
-- (NSData * _Nullable)sharedSecretFrom:(X25519Key *)x25519Key publicKey:(NSData *)x25519PublicKey;
+- (NSData * _Nullable)sharedSecretWithPublicKey:(NSData *)x25519PublicKey;
 
 @end
 

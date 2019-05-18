@@ -19,6 +19,7 @@
  */
 
 #import <XCTest/XCTest.h>
+#import "X25519Key.h"
 
 @interface X25519KeySpec : XCTestCase
 
@@ -26,18 +27,33 @@
 
 @implementation X25519KeySpec
 
-- (void)setUp {
-}
-
-- (void)tearDown {
-}
-
 - (void)testThatItCreatesX25519Keys {
+    X25519Key *key = [X25519Key new];
+    
+    XCTAssertNotNil(key.publicKey);
+    XCTAssertNotNil(key.privateKey);
+    XCTAssertEqual([key keyLength], 32);
+    XCTAssertEqualObjects(key.typeString, @"X25519");
+    XCTAssertNotNil([key publicKeySHA256]);
 }
 
-- (void)testPerformanceExample {
-    [self measureBlock:^{
-    }];
+- (void)testThatItComputesTheCorrectSharedSecret {
+    X25519Key *alice = [X25519Key new];
+    X25519Key *bob = [X25519Key new];
+    
+    NSData *aliceSharedSecret = [alice sharedSecretWithPublicKey:bob.publicKey];
+    NSData *bobSharedSecret = [bob sharedSecretWithPublicKey:alice.publicKey];
+    
+    XCTAssertEqualObjects(aliceSharedSecret, bobSharedSecret);
+}
+
+- (void)testCreatingKeyFromStoredKey {
+    X25519Key *key = [X25519Key new];
+    NSString *storedKey = [key description];
+    
+    X25519Key *restoredKey = [[X25519Key alloc] initFromDisk:storedKey];
+    
+    XCTAssertEqualObjects(key, restoredKey);
 }
 
 @end
