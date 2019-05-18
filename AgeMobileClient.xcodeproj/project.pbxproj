@@ -18,6 +18,10 @@
 		39696F5E228FED93003084BD /* NSData+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 39696F5D228FED93003084BD /* NSData+Helper.m */; };
 		39696F61228FF548003084BD /* NSString+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 39696F60228FF548003084BD /* NSString+Helper.m */; };
 		39696F642290910B003084BD /* X25519KeySpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 39696F632290910B003084BD /* X25519KeySpec.m */; };
+		39696FFA22909F29003084BD /* STREAMEncryption.m in Sources */ = {isa = PBXBuildFile; fileRef = 39696FF922909F29003084BD /* STREAMEncryption.m */; };
+		39696FFC2290A4EA003084BD /* STREAMEncryptionSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 39696FFB2290A4EA003084BD /* STREAMEncryptionSpec.m */; };
+		39696FFF2290B147003084BD /* NonceEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 39696FFE2290B147003084BD /* NonceEncoder.m */; };
+		396970012290BFA0003084BD /* NonceEncoderSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 396970002290BFA0003084BD /* NonceEncoderSpec.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,6 +116,12 @@
 		39696F5F228FF548003084BD /* NSString+Helper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Helper.h"; sourceTree = "<group>"; };
 		39696F60228FF548003084BD /* NSString+Helper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Helper.m"; sourceTree = "<group>"; };
 		39696F632290910B003084BD /* X25519KeySpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = X25519KeySpec.m; sourceTree = "<group>"; };
+		39696FF822909F29003084BD /* STREAMEncryption.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = STREAMEncryption.h; sourceTree = "<group>"; };
+		39696FF922909F29003084BD /* STREAMEncryption.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = STREAMEncryption.m; sourceTree = "<group>"; };
+		39696FFB2290A4EA003084BD /* STREAMEncryptionSpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = STREAMEncryptionSpec.m; sourceTree = "<group>"; };
+		39696FFD2290B147003084BD /* NonceEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NonceEncoder.h; sourceTree = "<group>"; };
+		39696FFE2290B147003084BD /* NonceEncoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NonceEncoder.m; sourceTree = "<group>"; };
+		396970002290BFA0003084BD /* NonceEncoderSpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NonceEncoderSpec.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +164,7 @@
 		39696EE7228FD90E003084BD /* AgeMobileClient */ = {
 			isa = PBXGroup;
 			children = (
+				39696FF722909F09003084BD /* STREAM */,
 				39696F58228FECFB003084BD /* Categories */,
 				39696F11228FE2C1003084BD /* Libraries */,
 				39696F10228FD968003084BD /* Models */,
@@ -174,6 +185,8 @@
 			children = (
 				39696F03228FD90F003084BD /* Info.plist */,
 				39696F632290910B003084BD /* X25519KeySpec.m */,
+				39696FFB2290A4EA003084BD /* STREAMEncryptionSpec.m */,
+				396970002290BFA0003084BD /* NonceEncoderSpec.m */,
 			);
 			path = AgeMobileClientTests;
 			sourceTree = "<group>";
@@ -316,6 +329,17 @@
 			path = Categories;
 			sourceTree = "<group>";
 		};
+		39696FF722909F09003084BD /* STREAM */ = {
+			isa = PBXGroup;
+			children = (
+				39696FF822909F29003084BD /* STREAMEncryption.h */,
+				39696FF922909F29003084BD /* STREAMEncryption.m */,
+				39696FFD2290B147003084BD /* NonceEncoder.h */,
+				39696FFE2290B147003084BD /* NonceEncoder.m */,
+			);
+			path = STREAM;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -418,7 +442,9 @@
 			files = (
 				39696EED228FD90E003084BD /* MainViewController.m in Sources */,
 				39696F5E228FED93003084BD /* NSData+Helper.m in Sources */,
+				39696FFA22909F29003084BD /* STREAMEncryption.m in Sources */,
 				39696F57228FE4CB003084BD /* X25519Key.m in Sources */,
+				39696FFF2290B147003084BD /* NonceEncoder.m in Sources */,
 				39696EF8228FD90F003084BD /* main.m in Sources */,
 				39696EEA228FD90E003084BD /* AppDelegate.m in Sources */,
 				39696F61228FF548003084BD /* NSString+Helper.m in Sources */,
@@ -429,7 +455,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				396970012290BFA0003084BD /* NonceEncoderSpec.m in Sources */,
 				39696F642290910B003084BD /* X25519KeySpec.m in Sources */,
+				39696FFC2290A4EA003084BD /* STREAMEncryptionSpec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
