@@ -18,23 +18,33 @@
  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import "MainViewController.h"
-#import "X25519Key.h"
+#import "NSData+Helper.h"
 
-@interface MainViewController ()
+@implementation NSData (Helper)
 
-@end
+#pragma mark - Class Methods
 
-@implementation MainViewController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
++ (NSData * _Nonnull)randomBytesOfLength:(NSUInteger)length {
+    NSMutableData *randomBytes = [NSMutableData dataWithLength:length];
+    __unused uint result = SecRandomCopyBytes(kSecRandomDefault, length, randomBytes.mutableBytes);
     
-    X25519Key *key = [X25519Key new];
-    NSLog(@"\nOriginal Key:\n%@", key);
+    return [randomBytes copy];
+}
+
+#pragma mark - Instance Methods
+
+- (NSString * _Nonnull)rawBase64Encoded {
+    return [[self base64EncodedStringWithOptions:0] stringByReplacingOccurrencesOfString:@"=" withString:@""];
+}
+
+- (NSString * _Nonnull)firstEightBytesRawBase64Encoded {
+    if (self.length < 8) {
+        return @"";
+    }
     
-    X25519Key *key2 = [[X25519Key alloc] initFromDisk:[key description]];
-    NSLog(@"\nParsed Key:\n%@", key2);
+    NSRange range = NSMakeRange(0, 8);
+    NSData *firstEightBytes = [self subdataWithRange:range];
+    return [firstEightBytes rawBase64Encoded];
 }
 
 @end

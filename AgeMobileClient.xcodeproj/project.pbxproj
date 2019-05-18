@@ -16,6 +16,8 @@
 		39696F02228FD90F003084BD /* AgeMobileClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 39696F01228FD90F003084BD /* AgeMobileClientTests.m */; };
 		39696F54228FE2D5003084BD /* libsodium.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 39696F53228FE2D5003084BD /* libsodium.a */; };
 		39696F57228FE4CB003084BD /* X25519Key.m in Sources */ = {isa = PBXBuildFile; fileRef = 39696F56228FE4CB003084BD /* X25519Key.m */; };
+		39696F5E228FED93003084BD /* NSData+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 39696F5D228FED93003084BD /* NSData+Helper.m */; };
+		39696F61228FF548003084BD /* NSString+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 39696F60228FF548003084BD /* NSString+Helper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,6 +108,10 @@
 		39696F53228FE2D5003084BD /* libsodium.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsodium.a; sourceTree = "<group>"; };
 		39696F55228FE4CB003084BD /* X25519Key.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = X25519Key.h; sourceTree = "<group>"; };
 		39696F56228FE4CB003084BD /* X25519Key.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = X25519Key.m; sourceTree = "<group>"; };
+		39696F5C228FED93003084BD /* NSData+Helper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSData+Helper.h"; sourceTree = "<group>"; };
+		39696F5D228FED93003084BD /* NSData+Helper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSData+Helper.m"; sourceTree = "<group>"; };
+		39696F5F228FF548003084BD /* NSString+Helper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Helper.h"; sourceTree = "<group>"; };
+		39696F60228FF548003084BD /* NSString+Helper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Helper.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +154,7 @@
 		39696EE7228FD90E003084BD /* AgeMobileClient */ = {
 			isa = PBXGroup;
 			children = (
+				39696F58228FECFB003084BD /* Categories */,
 				39696F11228FE2C1003084BD /* Libraries */,
 				39696F10228FD968003084BD /* Models */,
 				39696F0F228FD95F003084BD /* Views */,
@@ -298,6 +305,17 @@
 			path = lib;
 			sourceTree = "<group>";
 		};
+		39696F58228FECFB003084BD /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				39696F5C228FED93003084BD /* NSData+Helper.h */,
+				39696F5D228FED93003084BD /* NSData+Helper.m */,
+				39696F5F228FF548003084BD /* NSString+Helper.h */,
+				39696F60228FF548003084BD /* NSString+Helper.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -399,9 +417,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				39696EED228FD90E003084BD /* MainViewController.m in Sources */,
+				39696F5E228FED93003084BD /* NSData+Helper.m in Sources */,
 				39696F57228FE4CB003084BD /* X25519Key.m in Sources */,
 				39696EF8228FD90F003084BD /* main.m in Sources */,
 				39696EEA228FD90E003084BD /* AppDelegate.m in Sources */,
+				39696F61228FF548003084BD /* NSString+Helper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

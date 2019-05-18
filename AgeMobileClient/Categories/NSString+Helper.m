@@ -18,23 +18,19 @@
  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import "MainViewController.h"
-#import "X25519Key.h"
+#import "NSString+Helper.h"
 
-@interface MainViewController ()
+@implementation NSString (Helper)
 
-@end
+#pragma mark - Instance Methods
 
-@implementation MainViewController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    X25519Key *key = [X25519Key new];
-    NSLog(@"\nOriginal Key:\n%@", key);
-    
-    X25519Key *key2 = [[X25519Key alloc] initFromDisk:[key description]];
-    NSLog(@"\nParsed Key:\n%@", key2);
+// Apple requires Base64 strings to be padded 🤷🏻‍♂️
+// Even though the RFC http://www.faqs.org/rfcs/rfc4648.html
+// on section 3.2 says that it's not required
+- (NSData *)dataFromRawBase64Encoded {
+    NSUInteger paddedLength = self.length + (self.length % 3);
+    NSString *paddedString = [self stringByPaddingToLength:paddedLength withString:@"=" startingAtIndex:0];
+    return [[NSData alloc] initWithBase64EncodedString:paddedString options:NSDataBase64DecodingIgnoreUnknownCharacters];
 }
 
 @end

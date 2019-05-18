@@ -18,23 +18,17 @@
  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import "MainViewController.h"
-#import "X25519Key.h"
+#import <Foundation/Foundation.h>
 
-@interface MainViewController ()
+NS_ASSUME_NONNULL_BEGIN
 
-@end
+@interface NSData (Helper)
 
-@implementation MainViewController
++ (NSData *)randomBytesOfLength:(NSUInteger)length;
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    X25519Key *key = [X25519Key new];
-    NSLog(@"\nOriginal Key:\n%@", key);
-    
-    X25519Key *key2 = [[X25519Key alloc] initFromDisk:[key description]];
-    NSLog(@"\nParsed Key:\n%@", key2);
-}
+- (NSString *)rawBase64Encoded;
+- (NSString *)firstEightBytesRawBase64Encoded;
 
 @end
+
+NS_ASSUME_NONNULL_END

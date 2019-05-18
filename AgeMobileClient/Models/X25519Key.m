@@ -21,6 +21,12 @@
 
 #import "X25519Key.h"
 #include "sodium.h"
+#import "NSData+Helper.h"
+#import "NSString+Helper.h"
+
+static NSString * const kCreatedAtText = @"# created: ";
+static NSString * const kPublicKeyText = @"# pubkey:";
+static NSString * const kPrivateKeyText = @"AGE_PRIVATE_KEY_";
 
 @interface X25519Key ()
 
@@ -35,41 +41,96 @@
 #pragma mark - Public
 
 - (instancetype)init {
-    if (self = [super init]) {
-        unsigned char ed25519_pk[crypto_sign_ed25519_PUBLICKEYBYTES];
-        unsigned char ed25519_skpk[crypto_sign_ed25519_SECRETKEYBYTES];
-        unsigned char curve25519_pk[crypto_scalarmult_curve25519_BYTES];
-        unsigned char curve25519_skpk[crypto_scalarmult_curve25519_BYTES];
-        
-        crypto_sign_ed25519_keypair(ed25519_pk, ed25519_skpk);
-        
-        __unused int pkResult = crypto_sign_ed25519_pk_to_curve25519(curve25519_pk, ed25519_pk);
-        __unused int skResult = crypto_sign_ed25519_sk_to_curve25519(curve25519_skpk, ed25519_skpk);
-        
-        _publicKey = [NSData dataWithBytes:curve25519_pk length:crypto_scalarmult_curve25519_BYTES];
-        _privateKey = [NSData dataWithBytes:curve25519_skpk length:crypto_scalarmult_curve25519_BYTES];
-        _createdAt = [NSDate date];
+    unsigned char ed25519_pk[crypto_sign_ed25519_PUBLICKEYBYTES];
+    unsigned char ed25519_skpk[crypto_sign_ed25519_SECRETKEYBYTES];
+    unsigned char curve25519_pk[crypto_scalarmult_curve25519_BYTES];
+    unsigned char curve25519_skpk[crypto_scalarmult_curve25519_BYTES];
+    
+    crypto_sign_ed25519_keypair(ed25519_pk, ed25519_skpk);
+    
+    __unused int pkResult = crypto_sign_ed25519_pk_to_curve25519(curve25519_pk, ed25519_pk);
+    __unused int skResult = crypto_sign_ed25519_sk_to_curve25519(curve25519_skpk, ed25519_skpk);
+    
+    return [[X25519Key alloc]
+            initWithPublicKey:[NSData dataWithBytes:curve25519_pk length:crypto_scalarmult_curve25519_BYTES]
+            privateKey:[NSData dataWithBytes:curve25519_skpk length:crypto_scalarmult_curve25519_BYTES]
+            createdAt:[NSDate date]];
+}
+
+- (instancetype)initFromDisk:(NSString * _Nonnull)keyString {
+    NSArray *components = [keyString componentsSeparatedByString:@"\n"];
+    if (components.count != 3) {
+        return nil;
     }
     
-    return self;
+    NSString *dateString = components.firstObject;
+    if (![dateString containsString:kCreatedAtText]) {
+        return nil;
+    }
+    
+    NSString *pKeyString = components[1];
+    if (![pKeyString containsString:kPublicKeyText]) {
+        return nil;
+    }
+    
+    NSString *sKeyString = components.lastObject;
+    if (![sKeyString containsString:kPrivateKeyText]) {
+        return nil;
+    }
+    
+    NSString *createdAtString = [dateString stringByReplacingOccurrencesOfString:kCreatedAtText withString:@""];
+    NSDate *createdAt = [X25519Key createdAtFromString:createdAtString];
+    
+    NSString *publicKeyString = [pKeyString stringByReplacingOccurrencesOfString:kPublicKeyText withString:@""];
+    NSData *publicKey = [publicKeyString dataFromRawBase64Encoded];
+    
+    NSString *privateKeyString = [sKeyString stringByReplacingOccurrencesOfString:kPrivateKeyText withString:@""];
+    NSData *privateKey = [privateKeyString dataFromRawBase64Encoded];
+    
+    return [[X25519Key alloc] initWithPublicKey:publicKey privateKey:privateKey createdAt:createdAt];
+}
+
+- (NSString *)typeString {
+    return @"X25519";
+}
+
+- (NSData *)publicKeySHA256 {
+    if (self.publicKey == nil) {
+        return [NSData data];
+    }
+    
+    uint8_t digestData[CC_SHA256_DIGEST_LENGTH];
+    CC_SHA256(self.publicKey.bytes, (CC_LONG)self.publicKey.length, digestData);
+    
+    return [NSData dataWithBytes:digestData length:CC_SHA256_DIGEST_LENGTH];
 }
 
 - (NSString *)description {
-    NSString *line1 = [NSString stringWithFormat:@"# created: %@\n", [self createdAtString]];
-    NSString *line2 = [NSString stringWithFormat:@"# pubkey:%@\n", [self publicKeyString]];
-    NSString *line3 = [NSString stringWithFormat:@"AGE_PRIVATE_KEY_%@", [self privateKeyString]];
+    NSString *line1 = [NSString stringWithFormat:@"%@%@\n", kCreatedAtText, [self createdAtString]];
+    NSString *line2 = [NSString stringWithFormat:@"%@%@\n", kPublicKeyText, [self publicKeyString]];
+    NSString *line3 = [NSString stringWithFormat:@"%@%@", kPrivateKeyText, [self privateKeyString]];
     
     return [NSString stringWithFormat:@"%@%@%@", line1, line2, line3];
 }
 
 #pragma mark - Private
 
+- (instancetype)initWithPublicKey:(NSData * _Nonnull)publicKey privateKey:(NSData * _Nonnull)privateKey createdAt:(NSDate * _Nonnull)createdAt {
+    if (self = [super init]) {
+        _publicKey = publicKey;
+        _privateKey = privateKey;
+        _createdAt = createdAt;
+    }
+    
+    return self;
+}
+
 - (NSString *)publicKeyString {
-    return [[self.publicKey base64EncodedStringWithOptions:0] stringByReplacingOccurrencesOfString:@"=" withString:@""];
+    return [self.publicKey rawBase64Encoded];
 }
 
 - (NSString *)privateKeyString {
-    return [[self.privateKey base64EncodedStringWithOptions:0] stringByReplacingOccurrencesOfString:@"=" withString:@""];
+    return [self.privateKey rawBase64Encoded];
 }
 
 - (NSString *)createdAtString {
@@ -77,6 +138,13 @@
     formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss'Z'Z";
     
     return [formatter stringFromDate:self.createdAt];
+}
+
++ (NSDate *)createdAtFromString:(NSString *)stringDate {
+    NSDateFormatter *formatter = [NSDateFormatter new];
+    formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss'Z'Z";
+    
+    return [formatter dateFromString:stringDate];
 }
 
 @end
