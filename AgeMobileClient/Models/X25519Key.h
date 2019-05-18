@@ -17,10 +17,16 @@
  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-#import <UIKit/UIKit.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+#import <Foundation/Foundation.h>
 
-@property (strong, nonatomic) UIWindow *window;
+NS_ASSUME_NONNULL_BEGIN
+
+@interface X25519Key : NSObject
+
+@property (nonatomic, strong, readonly) NSData *publicKey;
+@property (nonatomic, strong, readonly) NSData *privateKey;
 
 @end
+
+NS_ASSUME_NONNULL_END
