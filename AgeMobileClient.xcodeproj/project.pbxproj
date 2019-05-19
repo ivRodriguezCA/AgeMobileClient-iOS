@@ -28,6 +28,7 @@
 		3969700D2290F120003084BD /* Age.m in Sources */ = {isa = PBXBuildFile; fileRef = 3969700C2290F120003084BD /* Age.m */; };
 		3969700F2290F15A003084BD /* AgeSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 3969700E2290F15A003084BD /* AgeSpec.m */; };
 		396970122290F8D2003084BD /* AgeObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 396970112290F8D2003084BD /* AgeObject.m */; };
+		396970152291121E003084BD /* KeyStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 396970142291121E003084BD /* KeyStorage.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -138,6 +139,9 @@
 		3969700E2290F15A003084BD /* AgeSpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgeSpec.m; sourceTree = "<group>"; };
 		396970102290F8D2003084BD /* AgeObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgeObject.h; sourceTree = "<group>"; };
 		396970112290F8D2003084BD /* AgeObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgeObject.m; sourceTree = "<group>"; };
+		396970132291121E003084BD /* KeyStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyStorage.h; sourceTree = "<group>"; };
+		396970142291121E003084BD /* KeyStorage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyStorage.m; sourceTree = "<group>"; };
+		3969701622911267003084BD /* KeyStorageProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyStorageProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -370,6 +374,9 @@
 				3969700C2290F120003084BD /* Age.m */,
 				396970102290F8D2003084BD /* AgeObject.h */,
 				396970112290F8D2003084BD /* AgeObject.m */,
+				396970132291121E003084BD /* KeyStorage.h */,
+				396970142291121E003084BD /* KeyStorage.m */,
+				3969701622911267003084BD /* KeyStorageProtocol.h */,
 			);
 			path = age;
 			sourceTree = "<group>";
@@ -477,6 +484,7 @@
 				3969700D2290F120003084BD /* Age.m in Sources */,
 				396970092290E7C7003084BD /* CiphertextObject.m in Sources */,
 				39696EED228FD90E003084BD /* MainViewController.m in Sources */,
+				396970152291121E003084BD /* KeyStorage.m in Sources */,
 				39696F5E228FED93003084BD /* NSData+Helper.m in Sources */,
 				39696FFA22909F29003084BD /* STREAMCryptor.m in Sources */,
 				39696F57228FE4CB003084BD /* X25519Key.m in Sources */,

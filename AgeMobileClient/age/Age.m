@@ -25,6 +25,7 @@
 #import "NSData+Helper.h"
 #import "CiphertextObject.h"
 #import "AgeObject.h"
+#import "KeyStorageProtocol.h"
 
 @interface Age ()
 
@@ -36,23 +37,54 @@
 
 - (void)X25519_encryptData:(NSData *)data
                 publicKeys:(NSArray<NSData *> *)publicKeys
-                 X25519Key:(X25519Key *)X25519Key
+                 X25519Key:(X25519Key *)X25519key
                 completion:(void (^)(AgeObject *ageObject))completion {
     CryptoService *crypto = [CryptoService new];
     [crypto encryptData:data completion:^(CiphertextObject * _Nonnull ciphertext) {
         dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-            AgeObject *obj = [AgeObject objectWithType:[X25519Key typeString]
-                                            ciphertext:ciphertext.ciphertext
-                                             publicKey:[X25519Key.publicKey rawBase64Encoded]];
+            AgeObject *obj = [AgeObject objectWithCiphertext:ciphertext.ciphertext
+                                             publicKey:[X25519key.publicKey rawBase64Encoded]];
             for (NSData *pk in publicKeys) {
-                NSData *sharedKey = [[X25519Key sharedSecretWithPublicKey:pk] sha256Digest];
+                NSData *sharedKey = [[X25519key sharedSecretWithPublicKey:pk] sha256Digest];
                 NSData *encryptedFileKey = [self chacha20poly1305Encrypt:ciphertext.key key:sharedKey];
-                [obj appendHexEncoding:[pk firstEightBytesHexEncoded] andEncryptedKey:[encryptedFileKey rawBase64Encoded]];
+                [obj appendType:[X25519Key typeString]
+                    hexEncoding:[pk firstEightBytesHexEncoded]
+                andEncryptedKey:[encryptedFileKey rawBase64Encoded]];
             }
             dispatch_async(dispatch_get_main_queue(), ^(void){
                 completion(obj);
             });
         });
+    }];
+}
+
+- (void)X25519_decryptFromRawInput:(NSString *)rawInput
+                        keyStorage:(id<KeyStorageProtocol>)keyStorage
+                        completion:(void (^)(NSData * _Nullable plaintext, NSError * _Nullable error))completion {
+    AgeObject *obj = [AgeObject objectWithRawInput:rawInput
+                                         keyStorage:keyStorage];
+    if (obj == nil) {
+        NSError *error = [NSError errorWithDomain:@"com.ivrodriguez.AgeMobileClient" code:001 userInfo:@{NSLocalizedDescriptionKey: @"Failed to parse input."}];
+        completion(nil, error);
+        return;
+    }
+    
+    NSData *encryptionKey = [obj.X25519key sharedSecretWithPublicKey:obj.senderPublicKey];
+    NSData *fileKey = [self chacha20poly1305Decrypt:obj.encryptedKey key:encryptionKey];
+    if (fileKey == nil) {
+        NSError *error = [NSError errorWithDomain:@"com.ivrodriguez.AgeMobileClient" code:001 userInfo:@{NSLocalizedDescriptionKey: @"Failed to decrypt file key."}];
+        completion(nil, error);
+        return;
+    }
+    
+    CryptoService *crypto = [CryptoService new];
+    [crypto decryptData:obj.payload key:fileKey completion:^(NSData * _Nullable plaintext, NSError * _Nullable error) {
+        if (error != nil) {
+            completion(nil, error);
+            return;
+        }
+        
+        completion(plaintext, nil);
     }];
 }
 
@@ -71,6 +103,24 @@
                                          /* nsec= */ NULL, nonce, key.bytes);
     
     return [NSData dataWithBytes:ciphertext length:ciphertext_len];
+}
+
+- (NSData *)chacha20poly1305Decrypt:(NSData *)data
+                                key:(NSData *)key {
+    // We use zero nonces because all keys are single use.
+    unsigned char nonce[crypto_aead_chacha20poly1305_NPUBBYTES] = {0};
+    unsigned char decrypted[data.length];
+    unsigned long long decrypted_len;
+    
+    if (crypto_aead_chacha20poly1305_decrypt(decrypted, &decrypted_len,
+                                             /* nsec= */ NULL,
+                                             data.bytes, data.length,
+                                             /* additional_data= */ NULL, /* additional_data_length= */ 0,
+                                             nonce, key.bytes) != 0) {
+        return nil;
+    }
+    
+    return [NSData dataWithBytes:decrypted length:decrypted_len];
 }
 
 @end

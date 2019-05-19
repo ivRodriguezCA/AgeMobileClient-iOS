@@ -22,6 +22,7 @@
 
 @class X25519Key;
 @class AgeObject;
+@protocol KeyStorageProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -31,7 +32,9 @@ NS_ASSUME_NONNULL_BEGIN
                 publicKeys:(NSArray<NSData *> *)publicKeys
                  X25519Key:(X25519Key *)X25519Key
                 completion:(void (^)(AgeObject *ageObject))completion;
-
+- (void)X25519_decryptFromRawInput:(NSString *)rawInput
+                        keyStorage:(id<KeyStorageProtocol>)keyStorage
+                        completion:(void (^)(NSData * _Nullable plaintext, NSError * _Nullable error))completion;
 @end
 
 NS_ASSUME_NONNULL_END

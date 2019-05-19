@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
          completion:(void (^)(CiphertextObject *ciphertext))completion;
 - (void)decryptData:(NSData *)ciphertext
                 key:(NSData *)key
-         completion:(void (^)(NSData *plaintext))completion;
+         completion:(void (^)(NSData * _Nullable plaintext, NSError * _Nullable error))completion;
 
 @end
 

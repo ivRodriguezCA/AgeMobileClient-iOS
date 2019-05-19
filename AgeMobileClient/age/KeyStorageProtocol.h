@@ -21,26 +21,14 @@
 #import <Foundation/Foundation.h>
 
 @class X25519Key;
-@protocol KeyStorageProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AgeObject : NSObject
+@protocol KeyStorageProtocol <NSObject>
 
-@property (nullable, strong, readonly) X25519Key *X25519key;
-@property (nullable, strong, readonly) NSData *senderPublicKey;
-@property (nullable, strong, readonly) NSData *encryptedKey;
-@property (nullable, strong, readonly) NSData *payload;
+- (void)storeX25519Key:(X25519Key *)key;
+- (X25519Key * _Nullable)retrieveX25519KeyWithHexEncoded:(NSString *)hexEncoded;
 
-+ (instancetype)objectWithCiphertext:(NSData *)ciphertext
-                           publicKey:(NSString *)rawBase64PublicKey;
-+ (instancetype)objectWithRawInput:(NSString *)rawOutput
-                        keyStorage:(id<KeyStorageProtocol>)keyStorage;
-
-- (void)appendType:(NSString *)type
-       hexEncoding:(NSString *)hexEncoding
-   andEncryptedKey:(NSString *)rawBase64EncryptedKey;
-- (NSString *)output;
 @end
 
 NS_ASSUME_NONNULL_END

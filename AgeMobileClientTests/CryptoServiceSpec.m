@@ -40,19 +40,40 @@
 
 - (void)testThatItEncryptsData {
     NSData *data = [@"super secret message" dataUsingEncoding:NSUTF8StringEncoding];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Waiting for encryption block."];
+    
     [self.subject encryptData:data completion:^(CiphertextObject * _Nonnull ciphertext) {
         XCTAssertNotNil(ciphertext.key);
         XCTAssertNotNil(ciphertext.ciphertext);
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:10.0 handler:^(NSError *error) {
+        if (error) {
+            XCTFail(@"Failed to wait for encryption block with error: %@", error);
+        }
     }];
 }
 
 - (void)testThatItDecryptsData {
     NSData *data = [@"super secret message" dataUsingEncoding:NSUTF8StringEncoding];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Waiting for decryption block."];
+    
     [self.subject encryptData:data completion:^(CiphertextObject * _Nonnull ciphertext) {
-        [self.subject decryptData:data key:ciphertext.key completion:^(NSData * _Nonnull plaintext) {
+        [self.subject decryptData:data key:ciphertext.key completion:^(NSData * _Nullable plaintext, NSError * _Nullable error) {
             NSString *plaintextString = [[NSString alloc] initWithData:plaintext encoding:NSUTF8StringEncoding];
+            XCTAssertNil(error);
             XCTAssertEqualObjects(@"super secret message", plaintextString);
+            [expectation fulfill];
         }];
+    }];
+    
+    [self waitForExpectationsWithTimeout:10.0 handler:^(NSError *error) {
+        if (error) {
+            XCTFail(@"Failed to wait for decryption block with error: %@", error);
+        }
     }];
 }
 

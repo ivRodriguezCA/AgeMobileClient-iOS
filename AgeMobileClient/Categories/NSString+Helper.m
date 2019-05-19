@@ -30,7 +30,9 @@
 - (NSData *)dataFromRawBase64Encoded {
     NSUInteger paddedLength = self.length + (self.length % 3);
     NSString *paddedString = [self stringByPaddingToLength:paddedLength withString:@"=" startingAtIndex:0];
-    return [[NSData alloc] initWithBase64EncodedString:paddedString options:NSDataBase64DecodingIgnoreUnknownCharacters];
+    paddedString = [paddedString stringByReplacingOccurrencesOfString:@"_" withString:@"/"];
+    paddedString = [paddedString stringByReplacingOccurrencesOfString:@"-" withString:@"+"];
+    return [[NSData alloc] initWithBase64EncodedString:paddedString options:0];
 }
 
 @end

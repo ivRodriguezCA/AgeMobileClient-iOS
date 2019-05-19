@@ -18,29 +18,37 @@
  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import <Foundation/Foundation.h>
+#import "KeyStorage.h"
+#import "X25519Key.h"
+#import "NSData+Helper.h"
 
-@class X25519Key;
-@protocol KeyStorageProtocol;
+@interface KeyStorage ()
 
-NS_ASSUME_NONNULL_BEGIN
+@property (nonatomic, strong) NSDictionary<NSString *, X25519Key *> *keys;
 
-@interface AgeObject : NSObject
-
-@property (nullable, strong, readonly) X25519Key *X25519key;
-@property (nullable, strong, readonly) NSData *senderPublicKey;
-@property (nullable, strong, readonly) NSData *encryptedKey;
-@property (nullable, strong, readonly) NSData *payload;
-
-+ (instancetype)objectWithCiphertext:(NSData *)ciphertext
-                           publicKey:(NSString *)rawBase64PublicKey;
-+ (instancetype)objectWithRawInput:(NSString *)rawOutput
-                        keyStorage:(id<KeyStorageProtocol>)keyStorage;
-
-- (void)appendType:(NSString *)type
-       hexEncoding:(NSString *)hexEncoding
-   andEncryptedKey:(NSString *)rawBase64EncryptedKey;
-- (NSString *)output;
 @end
 
-NS_ASSUME_NONNULL_END
+@implementation KeyStorage
+
+- (instancetype)init {
+    if (self = [super init]) {
+        _keys = [NSDictionary new];
+    }
+    
+    return self;
+}
+
+#pragma mark - <KeyStorageProtocol>
+
+// This is temporary, we'll store these on disk.
+- (void)storeX25519Key:(X25519Key *)key {
+    NSMutableDictionary *mutableKyes = [self.keys mutableCopy];
+    [mutableKyes setObject:key forKey:[key.publicKey firstEightBytesHexEncoded]];
+    self.keys = [mutableKyes copy];
+}
+
+- (X25519Key * _Nullable)retrieveX25519KeyWithHexEncoded:(NSString *)hexEncoded {
+    return self.keys[hexEncoded];
+}
+
+@end

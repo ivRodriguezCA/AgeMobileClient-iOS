@@ -36,7 +36,10 @@
 #pragma mark - Instance Methods
 
 - (NSString * _Nonnull)rawBase64Encoded {
-    return [[self base64EncodedStringWithOptions:0] stringByReplacingOccurrencesOfString:@"=" withString:@""];
+    NSString *output = [self base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    output = [output stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
+    output = [output stringByReplacingOccurrencesOfString:@"+" withString:@"-"];
+    return [output stringByReplacingOccurrencesOfString:@"=" withString:@""];
 }
 
 - (NSString * _Nonnull)firstEightBytesHexEncoded {

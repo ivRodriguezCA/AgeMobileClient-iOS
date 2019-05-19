@@ -26,7 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, readonly) NSData *publicKey;
 @property (nonatomic, strong, readonly) NSData *privateKey;
-@property (nonatomic, copy, readonly) NSString *typeString;
+
++ (NSString *)typeString;
 
 - (instancetype)initFromDisk:(NSString *)keyString;
 - (NSData *)publicKeySHA256;

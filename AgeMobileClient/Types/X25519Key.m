@@ -41,6 +41,10 @@ static NSUInteger const kCurve25519KeyLength = 32;
 
 #pragma mark - Public
 
++ (NSString *)typeString {
+    return @"X25519";
+}
+
 - (instancetype)init {
     unsigned char ed25519_pk[crypto_sign_ed25519_PUBLICKEYBYTES];
     unsigned char ed25519_skpk[crypto_sign_ed25519_SECRETKEYBYTES];
@@ -89,10 +93,6 @@ static NSUInteger const kCurve25519KeyLength = 32;
     NSData *privateKey = [privateKeyString dataFromRawBase64Encoded];
     
     return [[X25519Key alloc] initWithPublicKey:publicKey privateKey:privateKey createdAt:createdAt];
-}
-
-- (NSString *)typeString {
-    return @"X25519";
 }
 
 - (NSData *)publicKeySHA256 {

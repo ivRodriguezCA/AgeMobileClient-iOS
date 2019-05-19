@@ -58,7 +58,7 @@
 
 - (void)decryptData:(NSData *)ciphertext
                 key:(NSData *)key
-         completion:(void (^)(NSData *plaintext))completion {
+         completion:(void (^)(NSData * _Nullable plaintext, NSError * _Nullable error))completion {
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
         STREAMCryptor *cryptor = [STREAMCryptor new];
         NSArray<NSData *> *blocks = [self divideDataInBlocks:ciphertext];
@@ -67,6 +67,14 @@
             NSData *data = blocks[idx];
             BOOL isLastBlock = idx == blocks.count - 1;
             NSData *plaintextBlock = [cryptor decryptData:data key:key isLastBlock:isLastBlock];
+            if (plaintextBlock == nil) {
+                NSString *errorDesc = [NSString stringWithFormat:@"Failed to decrypt block at index %lu.", (unsigned long)idx];
+                NSError *error = [NSError errorWithDomain:@"com.ivrodriguez.AgeMobileClient" code:001 userInfo:@{NSLocalizedDescriptionKey: errorDesc}];
+                dispatch_async(dispatch_get_main_queue(), ^(void){
+                    completion(nil, error);
+                });
+                return;
+            }
             [plaintextBlocks addObject:plaintextBlock];
         }
         NSMutableData *plaintext = [NSMutableData new];
@@ -74,7 +82,7 @@
             [plaintext appendData:d];
         }
         dispatch_async(dispatch_get_main_queue(), ^(void){
-            completion([plaintext copy]);
+            completion([plaintext copy], nil);
         });
     });
 }

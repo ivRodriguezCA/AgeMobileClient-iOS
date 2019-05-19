@@ -33,7 +33,6 @@
     XCTAssertNotNil(key.publicKey);
     XCTAssertNotNil(key.privateKey);
     XCTAssertEqual([key keyLength], 32);
-    XCTAssertEqualObjects(key.typeString, @"X25519");
     XCTAssertNotNil([key publicKeySHA256]);
 }
 
