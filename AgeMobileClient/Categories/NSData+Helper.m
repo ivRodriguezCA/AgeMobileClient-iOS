@@ -39,14 +39,14 @@
     return [[self base64EncodedStringWithOptions:0] stringByReplacingOccurrencesOfString:@"=" withString:@""];
 }
 
-- (NSString * _Nonnull)firstEightBytesRawBase64Encoded {
+- (NSString * _Nonnull)firstEightBytesHexEncoded {
     if (self.length < 8) {
         return @"";
     }
     
     NSRange range = NSMakeRange(0, 8);
     NSData *firstEightBytes = [self subdataWithRange:range];
-    return [firstEightBytes rawBase64Encoded];
+    return [firstEightBytes toHexString];
 }
 
 - (NSData *)sha256Digest {
@@ -58,6 +58,23 @@
     CC_SHA256(self.bytes, (CC_LONG)self.length, digestData);
     
     return [NSData dataWithBytes:digestData length:CC_SHA256_DIGEST_LENGTH];
+}
+
+// Method modified from https://stackoverflow.com/a/9084784
+- (NSString *)toHexString {
+    if (self.length == 0) {
+        return [NSString new];
+    }
+    
+    const unsigned char *dataBuffer = (const unsigned char *)self.bytes;
+    NSUInteger dataLength  = self.length;
+    NSMutableString *hexString  = [NSMutableString stringWithCapacity:(dataLength * 2)];
+    
+    for (NSUInteger idx = 0; idx < dataLength; idx++) {
+        [hexString appendString:[NSString stringWithFormat:@"%02lx", (unsigned long)dataBuffer[idx]]];
+    }
+    
+    return [NSString stringWithString:hexString];
 }
 
 @end

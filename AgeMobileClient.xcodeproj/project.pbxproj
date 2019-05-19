@@ -27,6 +27,7 @@
 		396970092290E7C7003084BD /* CiphertextObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 396970082290E7C7003084BD /* CiphertextObject.m */; };
 		3969700D2290F120003084BD /* Age.m in Sources */ = {isa = PBXBuildFile; fileRef = 3969700C2290F120003084BD /* Age.m */; };
 		3969700F2290F15A003084BD /* AgeSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 3969700E2290F15A003084BD /* AgeSpec.m */; };
+		396970122290F8D2003084BD /* AgeObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 396970112290F8D2003084BD /* AgeObject.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -135,6 +136,8 @@
 		3969700B2290F120003084BD /* Age.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Age.h; sourceTree = "<group>"; };
 		3969700C2290F120003084BD /* Age.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Age.m; sourceTree = "<group>"; };
 		3969700E2290F15A003084BD /* AgeSpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgeSpec.m; sourceTree = "<group>"; };
+		396970102290F8D2003084BD /* AgeObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgeObject.h; sourceTree = "<group>"; };
+		396970112290F8D2003084BD /* AgeObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgeObject.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,11 +180,11 @@
 		39696EE7228FD90E003084BD /* AgeMobileClient */ = {
 			isa = PBXGroup;
 			children = (
+				39696F11228FE2C1003084BD /* Libraries */,
 				3969700A2290F0F7003084BD /* age */,
 				39696FF722909F09003084BD /* STREAM */,
 				39696F58228FECFB003084BD /* Categories */,
-				39696F11228FE2C1003084BD /* Libraries */,
-				39696F10228FD968003084BD /* Models */,
+				39696F10228FD968003084BD /* Types */,
 				39696F0F228FD95F003084BD /* Views */,
 				39696F0E228FD958003084BD /* Controllers */,
 				39696EE8228FD90E003084BD /* AppDelegate.h */,
@@ -224,13 +227,13 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		39696F10228FD968003084BD /* Models */ = {
+		39696F10228FD968003084BD /* Types */ = {
 			isa = PBXGroup;
 			children = (
 				39696F55228FE4CB003084BD /* X25519Key.h */,
 				39696F56228FE4CB003084BD /* X25519Key.m */,
 			);
-			path = Models;
+			path = Types;
 			sourceTree = "<group>";
 		};
 		39696F11228FE2C1003084BD /* Libraries */ = {
@@ -365,6 +368,8 @@
 			children = (
 				3969700B2290F120003084BD /* Age.h */,
 				3969700C2290F120003084BD /* Age.m */,
+				396970102290F8D2003084BD /* AgeObject.h */,
+				396970112290F8D2003084BD /* AgeObject.m */,
 			);
 			path = age;
 			sourceTree = "<group>";
@@ -479,6 +484,7 @@
 				39696EF8228FD90F003084BD /* main.m in Sources */,
 				396970042290DEF2003084BD /* CryptoService.m in Sources */,
 				39696EEA228FD90E003084BD /* AppDelegate.m in Sources */,
+				396970122290F8D2003084BD /* AgeObject.m in Sources */,
 				39696F61228FF548003084BD /* NSString+Helper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

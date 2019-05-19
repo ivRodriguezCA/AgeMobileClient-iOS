@@ -27,8 +27,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSData *)randomBytesOfLength:(NSUInteger)length;
 
 - (NSString *)rawBase64Encoded;
-- (NSString *)firstEightBytesRawBase64Encoded;
+- (NSString *)firstEightBytesHexEncoded;
 - (NSData *)sha256Digest;
+- (NSString *)toHexString;
 
 @end
 

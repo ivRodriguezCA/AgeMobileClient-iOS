@@ -32,8 +32,8 @@
 #pragma mark - Public
 
 - (void)encryptData:(NSData *)plaintext
-         completion:(void (^)(CiphertextObject * ciphertext))completion {
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+         completion:(void (^)(CiphertextObject *ciphertext))completion {
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         unsigned char rawKey[crypto_aead_chacha20poly1305_KEYBYTES];
         crypto_aead_chacha20poly1305_keygen(rawKey);
         NSData *key = [NSData dataWithBytes:rawKey length:crypto_aead_chacha20poly1305_KEYBYTES];

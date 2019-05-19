@@ -20,9 +20,17 @@
 
 #import <Foundation/Foundation.h>
 
+@class X25519Key;
+@class AgeObject;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Age : NSObject
+
+- (void)X25519_encryptData:(NSData *)data
+                publicKeys:(NSArray<NSData *> *)publicKeys
+                 X25519Key:(X25519Key *)X25519Key
+                completion:(void (^)(AgeObject *ageObject))completion;
 
 @end
 

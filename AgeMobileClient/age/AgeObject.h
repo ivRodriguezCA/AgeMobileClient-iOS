@@ -20,18 +20,18 @@
 
 #import <Foundation/Foundation.h>
 
-@class CiphertextObject;
-
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CryptoService : NSObject
+@interface AgeObject : NSObject
 
-- (void)encryptData:(NSData *)plaintext
-         completion:(void (^)(CiphertextObject *ciphertext))completion;
-- (void)decryptData:(NSData *)ciphertext
-                key:(NSData *)key
-         completion:(void (^)(NSData *plaintext))completion;
++ (instancetype)objectWithType:(NSString *)type
+                    ciphertext:(NSData *)ciphertext
+                     publicKey:(NSString *)rawBase64PublicKey;
 
+- (void)appendHexEncoding:(NSString *)hexEncoding
+          andEncryptedKey:(NSString *)rawBase64EncryptedKey;
+
+- (NSString *)output;
 @end
 
 NS_ASSUME_NONNULL_END
