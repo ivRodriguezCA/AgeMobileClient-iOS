@@ -150,4 +150,159 @@
     }];
 }
 
+- (void)testThatItCanDecryptThePayloadWithMultipleRecipients {
+    X25519Key *alice = [X25519Key new];
+    X25519Key *bob = [X25519Key new];
+    X25519Key *charles = [X25519Key new];
+    X25519Key *diana = [X25519Key new];
+    NSData *data = [@"super secret message" dataUsingEncoding:NSUTF8StringEncoding];
+    [self.keyStorage storeX25519Key:charles];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Waiting for decryption block."];
+    
+    [self.subject X25519_encryptData:data
+                          publicKeys:@[bob.publicKey, charles.publicKey, diana.publicKey]
+                           X25519Key:alice completion:^(AgeObject *ageObject) {
+                               NSString *rawInput = [ageObject output];
+                               [self.subject X25519_decryptFromRawInput:rawInput
+                                                             keyStorage:self.keyStorage
+                                                             completion:^(NSData * _Nullable plaintext, NSError * _Nullable error) {
+                                                                 XCTAssertNil(error);
+                                                                 NSString *plaintextString = [[NSString alloc] initWithData:plaintext encoding:NSUTF8StringEncoding];
+                                                                 XCTAssertEqualObjects(@"super secret message", plaintextString);
+                                                                 [expectation fulfill];
+                                                             }];
+                           }];
+    
+    [self waitForExpectationsWithTimeout:10.0 handler:^(NSError *error) {
+        if (error) {
+            XCTFail(@"Failed to wait for encryption block with error: %@", error);
+        }
+    }];
+}
+
+- (void)testThatItCanDecryptThePayloadWithMultipleRecipientsWhenUserIsLastOnTheList {
+    X25519Key *alice = [X25519Key new];
+    X25519Key *bob = [X25519Key new];
+    X25519Key *charles = [X25519Key new];
+    NSData *data = [@"super secret message" dataUsingEncoding:NSUTF8StringEncoding];
+    [self.keyStorage storeX25519Key:charles];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Waiting for decryption block."];
+    
+    [self.subject X25519_encryptData:data
+                          publicKeys:@[bob.publicKey, charles.publicKey]
+                           X25519Key:alice completion:^(AgeObject *ageObject) {
+                               NSString *rawInput = [ageObject output];
+                               [self.subject X25519_decryptFromRawInput:rawInput
+                                                             keyStorage:self.keyStorage
+                                                             completion:^(NSData * _Nullable plaintext, NSError * _Nullable error) {
+                                                                 XCTAssertNil(error);
+                                                                 NSString *plaintextString = [[NSString alloc] initWithData:plaintext encoding:NSUTF8StringEncoding];
+                                                                 XCTAssertEqualObjects(@"super secret message", plaintextString);
+                                                                 [expectation fulfill];
+                                                             }];
+                           }];
+    
+    [self waitForExpectationsWithTimeout:10.0 handler:^(NSError *error) {
+        if (error) {
+            XCTFail(@"Failed to wait for encryption block with error: %@", error);
+        }
+    }];
+}
+
+- (void)testThatItCanDecryptThePayloadWithMultipleRecipientsWhenUserIsFirstOnTheList {
+    X25519Key *alice = [X25519Key new];
+    X25519Key *bob = [X25519Key new];
+    X25519Key *charles = [X25519Key new];
+    NSData *data = [@"super secret message" dataUsingEncoding:NSUTF8StringEncoding];
+    [self.keyStorage storeX25519Key:bob];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Waiting for decryption block."];
+    
+    [self.subject X25519_encryptData:data
+                          publicKeys:@[bob.publicKey, charles.publicKey]
+                           X25519Key:alice completion:^(AgeObject *ageObject) {
+                               NSString *rawInput = [ageObject output];
+                               [self.subject X25519_decryptFromRawInput:rawInput
+                                                             keyStorage:self.keyStorage
+                                                             completion:^(NSData * _Nullable plaintext, NSError * _Nullable error) {
+                                                                 XCTAssertNil(error);
+                                                                 NSString *plaintextString = [[NSString alloc] initWithData:plaintext encoding:NSUTF8StringEncoding];
+                                                                 XCTAssertEqualObjects(@"super secret message", plaintextString);
+                                                                 [expectation fulfill];
+                                                             }];
+                           }];
+    
+    [self waitForExpectationsWithTimeout:10.0 handler:^(NSError *error) {
+        if (error) {
+            XCTFail(@"Failed to wait for encryption block with error: %@", error);
+        }
+    }];
+}
+
+- (void)testThatItCanDecryptDataLoadedFromDiskForOneRecipient {
+    NSString *keyString = [self loadKeysFileContent:@"bob_keys"];
+    X25519Key *bob = [[X25519Key alloc] initFromDisk:keyString];
+    [self.keyStorage storeX25519Key:bob];
+    NSString *rawInput = [self loadAgeFileContent:@"alice_to_bob"];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Waiting for decryption block."];
+    
+    [self.subject X25519_decryptFromRawInput:rawInput
+                                  keyStorage:self.keyStorage
+                                  completion:^(NSData * _Nullable plaintext, NSError * _Nullable error) {
+                                      XCTAssertNil(error);
+                                      NSString *plaintextString = [[NSString alloc] initWithData:plaintext encoding:NSUTF8StringEncoding];
+                                      XCTAssertEqualObjects(@"super secret message", plaintextString);
+                                      [expectation fulfill];
+                                  }];
+    
+    [self waitForExpectationsWithTimeout:10.0 handler:^(NSError *error) {
+        if (error) {
+            XCTFail(@"Failed to wait for encryption block with error: %@", error);
+        }
+    }];
+}
+
+- (void)testThatItCanDecryptDataLoadedFromDiskForMultipleRecipients {
+    NSString *keyString = [self loadKeysFileContent:@"charles_keys"];
+    X25519Key *charles = [[X25519Key alloc] initFromDisk:keyString];
+    [self.keyStorage storeX25519Key:charles];
+    NSString *rawInput = [self loadAgeFileContent:@"alice_to_bob_charles_diana"];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Waiting for decryption block."];
+    
+    [self.subject X25519_decryptFromRawInput:rawInput
+                                  keyStorage:self.keyStorage
+                                  completion:^(NSData * _Nullable plaintext, NSError * _Nullable error) {
+                                      XCTAssertNil(error);
+                                      NSString *plaintextString = [[NSString alloc] initWithData:plaintext encoding:NSUTF8StringEncoding];
+                                      XCTAssertEqualObjects(@"super secret message", plaintextString);
+                                      [expectation fulfill];
+                                  }];
+    
+    [self waitForExpectationsWithTimeout:10.0 handler:^(NSError *error) {
+        if (error) {
+            XCTFail(@"Failed to wait for encryption block with error: %@", error);
+        }
+    }];
+}
+
+#pragma mark - Helpers
+
+- (NSString *)loadKeysFileContent:(NSString *)filename {
+    return [self loadTestFileContent:filename extension:@"txt"];
+}
+
+- (NSString *)loadAgeFileContent:(NSString *)filename {
+    return [self loadTestFileContent:filename extension:@"age"];
+}
+
+- (NSString *)loadTestFileContent:(NSString *)filename extension:(NSString *)extension {
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+    NSString *filePath = [bundle pathForResource:filename ofType:extension] ;
+    return [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+}
+
 @end

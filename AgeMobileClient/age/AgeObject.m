@@ -109,6 +109,7 @@ NS_ASSUME_NONNULL_END
         if ([line hasPrefix:kRecipientLineBeginning]) {
             // After we find our key information just ignore all other recipients' entries.
             if (X25519key != nil) {
+                idx++;
                 continue;
             }
             
@@ -125,6 +126,7 @@ NS_ASSUME_NONNULL_END
                 X25519key = [keyStorage retrieveX25519KeyWithHexEncoded:hexEncoding];
                 // If we cannot find this key id on our KeyStorage it's someone else's key.
                 if (X25519key == nil) {
+                    idx++;
                     continue;
                 }
                 // For X25519 keys, the 4th element is the sender's public key.

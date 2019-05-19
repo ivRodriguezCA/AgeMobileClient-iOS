@@ -29,6 +29,10 @@
 		3969700F2290F15A003084BD /* AgeSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 3969700E2290F15A003084BD /* AgeSpec.m */; };
 		396970122290F8D2003084BD /* AgeObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 396970112290F8D2003084BD /* AgeObject.m */; };
 		396970152291121E003084BD /* KeyStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 396970142291121E003084BD /* KeyStorage.m */; };
+		3969701E2291CD6B003084BD /* bob_keys.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3969701A2291CD6B003084BD /* bob_keys.txt */; };
+		3969701F2291CD6B003084BD /* alice_to_bob.age in Resources */ = {isa = PBXBuildFile; fileRef = 3969701B2291CD6B003084BD /* alice_to_bob.age */; };
+		396970202291CD6B003084BD /* charles_keys.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3969701C2291CD6B003084BD /* charles_keys.txt */; };
+		396970212291CD6B003084BD /* alice_to_bob_charles_diana.age in Resources */ = {isa = PBXBuildFile; fileRef = 3969701D2291CD6B003084BD /* alice_to_bob_charles_diana.age */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -142,6 +146,10 @@
 		396970132291121E003084BD /* KeyStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyStorage.h; sourceTree = "<group>"; };
 		396970142291121E003084BD /* KeyStorage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyStorage.m; sourceTree = "<group>"; };
 		3969701622911267003084BD /* KeyStorageProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyStorageProtocol.h; sourceTree = "<group>"; };
+		3969701A2291CD6B003084BD /* bob_keys.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bob_keys.txt; sourceTree = "<group>"; };
+		3969701B2291CD6B003084BD /* alice_to_bob.age */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = alice_to_bob.age; sourceTree = "<group>"; };
+		3969701C2291CD6B003084BD /* charles_keys.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = charles_keys.txt; sourceTree = "<group>"; };
+		3969701D2291CD6B003084BD /* alice_to_bob_charles_diana.age */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = alice_to_bob_charles_diana.age; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -204,6 +212,7 @@
 		39696F00228FD90F003084BD /* AgeMobileClientTests */ = {
 			isa = PBXGroup;
 			children = (
+				396970192291CD5F003084BD /* Helper Files */,
 				39696F03228FD90F003084BD /* Info.plist */,
 				39696F632290910B003084BD /* X25519KeySpec.m */,
 				39696FFB2290A4EA003084BD /* STREAMCryptorSpec.m */,
@@ -381,6 +390,17 @@
 			path = age;
 			sourceTree = "<group>";
 		};
+		396970192291CD5F003084BD /* Helper Files */ = {
+			isa = PBXGroup;
+			children = (
+				3969701D2291CD6B003084BD /* alice_to_bob_charles_diana.age */,
+				3969701B2291CD6B003084BD /* alice_to_bob.age */,
+				3969701A2291CD6B003084BD /* bob_keys.txt */,
+				3969701C2291CD6B003084BD /* charles_keys.txt */,
+			);
+			path = "Helper Files";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -471,6 +491,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				396970212291CD6B003084BD /* alice_to_bob_charles_diana.age in Resources */,
+				3969701E2291CD6B003084BD /* bob_keys.txt in Resources */,
+				396970202291CD6B003084BD /* charles_keys.txt in Resources */,
+				3969701F2291CD6B003084BD /* alice_to_bob.age in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
