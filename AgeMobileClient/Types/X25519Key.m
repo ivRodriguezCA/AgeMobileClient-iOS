@@ -45,6 +45,46 @@ static NSUInteger const kCurve25519KeyLength = 32;
     return @"X25519";
 }
 
++ (NSArray<X25519Key *> * _Nullable)loadKeysFromDisk:(NSString * _Nonnull)keyString {
+    NSArray *components = [keyString componentsSeparatedByString:@"\n"];
+    // Every key has 3 lines.
+    if (components.count % 3 != 0) {
+        return nil;
+    }
+    
+    NSMutableArray<X25519Key *> *keys = [NSMutableArray new];
+    for (NSUInteger idx = 0; idx < components.count; idx += 3) {
+        NSString *dateString = components[idx];
+        NSString *pKeyString = components[idx+1];
+        NSString *sKeyString = components[idx+2];
+        
+        // Ignore they key if we can't parse it.
+        if (![dateString containsString:kCreatedAtText]) {
+            continue;
+        }
+        if (![pKeyString containsString:kPublicKeyText]) {
+            continue;
+        }
+        if (![sKeyString containsString:kPrivateKeyText]) {
+            continue;
+        }
+        
+        NSString *createdAtString = [dateString stringByReplacingOccurrencesOfString:kCreatedAtText withString:@""];
+        NSDate *createdAt = [X25519Key createdAtFromString:createdAtString];
+        
+        NSString *publicKeyString = [pKeyString stringByReplacingOccurrencesOfString:kPublicKeyText withString:@""];
+        NSData *publicKey = [publicKeyString dataFromRawBase64Encoded];
+        
+        NSString *privateKeyString = [sKeyString stringByReplacingOccurrencesOfString:kPrivateKeyText withString:@""];
+        NSData *privateKey = [privateKeyString dataFromRawBase64Encoded];
+        
+        X25519Key *key = [[X25519Key alloc] initWithPublicKey:publicKey privateKey:privateKey createdAt:createdAt];
+        [keys addObject:key];
+    }
+    
+    return [keys copy];
+}
+
 - (instancetype)init {
     unsigned char ed25519_pk[crypto_sign_ed25519_PUBLICKEYBYTES];
     unsigned char ed25519_skpk[crypto_sign_ed25519_SECRETKEYBYTES];
@@ -60,39 +100,6 @@ static NSUInteger const kCurve25519KeyLength = 32;
             initWithPublicKey:[NSData dataWithBytes:curve25519_pk length:crypto_scalarmult_curve25519_BYTES]
             privateKey:[NSData dataWithBytes:curve25519_skpk length:crypto_scalarmult_curve25519_BYTES]
             createdAt:[NSDate date]];
-}
-
-- (instancetype)initFromDisk:(NSString * _Nonnull)keyString {
-    NSArray *components = [keyString componentsSeparatedByString:@"\n"];
-    if (components.count != 3) {
-        return nil;
-    }
-    
-    NSString *dateString = components.firstObject;
-    if (![dateString containsString:kCreatedAtText]) {
-        return nil;
-    }
-    
-    NSString *pKeyString = components[1];
-    if (![pKeyString containsString:kPublicKeyText]) {
-        return nil;
-    }
-    
-    NSString *sKeyString = components.lastObject;
-    if (![sKeyString containsString:kPrivateKeyText]) {
-        return nil;
-    }
-    
-    NSString *createdAtString = [dateString stringByReplacingOccurrencesOfString:kCreatedAtText withString:@""];
-    NSDate *createdAt = [X25519Key createdAtFromString:createdAtString];
-    
-    NSString *publicKeyString = [pKeyString stringByReplacingOccurrencesOfString:kPublicKeyText withString:@""];
-    NSData *publicKey = [publicKeyString dataFromRawBase64Encoded];
-    
-    NSString *privateKeyString = [sKeyString stringByReplacingOccurrencesOfString:kPrivateKeyText withString:@""];
-    NSData *privateKey = [privateKeyString dataFromRawBase64Encoded];
-    
-    return [[X25519Key alloc] initWithPublicKey:publicKey privateKey:privateKey createdAt:createdAt];
 }
 
 - (NSData *)publicKeySHA256 {
@@ -122,7 +129,7 @@ static NSUInteger const kCurve25519KeyLength = 32;
     return [NSData dataWithBytes:scalarmult_q length:crypto_scalarmult_BYTES];
 }
 
-- (NSString *)description {
+- (NSString *)output {
     NSString *line1 = [NSString stringWithFormat:@"%@%@\n", kCreatedAtText, [self createdAtString]];
     NSString *line2 = [NSString stringWithFormat:@"%@%@\n", kPublicKeyText, [self publicKeyString]];
     NSString *line3 = [NSString stringWithFormat:@"%@%@", kPrivateKeyText, [self privateKeyString]];

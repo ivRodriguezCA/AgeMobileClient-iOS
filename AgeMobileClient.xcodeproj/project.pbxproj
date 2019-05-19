@@ -33,6 +33,8 @@
 		3969701F2291CD6B003084BD /* alice_to_bob.age in Resources */ = {isa = PBXBuildFile; fileRef = 3969701B2291CD6B003084BD /* alice_to_bob.age */; };
 		396970202291CD6B003084BD /* charles_keys.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3969701C2291CD6B003084BD /* charles_keys.txt */; };
 		396970212291CD6B003084BD /* alice_to_bob_charles_diana.age in Resources */ = {isa = PBXBuildFile; fileRef = 3969701D2291CD6B003084BD /* alice_to_bob_charles_diana.age */; };
+		396970242291D521003084BD /* alice_to_bob_charles.age in Resources */ = {isa = PBXBuildFile; fileRef = 396970222291D520003084BD /* alice_to_bob_charles.age */; };
+		396970252291D521003084BD /* bob_multiple_keys.txt in Resources */ = {isa = PBXBuildFile; fileRef = 396970232291D520003084BD /* bob_multiple_keys.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -150,6 +152,8 @@
 		3969701B2291CD6B003084BD /* alice_to_bob.age */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = alice_to_bob.age; sourceTree = "<group>"; };
 		3969701C2291CD6B003084BD /* charles_keys.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = charles_keys.txt; sourceTree = "<group>"; };
 		3969701D2291CD6B003084BD /* alice_to_bob_charles_diana.age */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = alice_to_bob_charles_diana.age; sourceTree = "<group>"; };
+		396970222291D520003084BD /* alice_to_bob_charles.age */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = alice_to_bob_charles.age; sourceTree = "<group>"; };
+		396970232291D520003084BD /* bob_multiple_keys.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bob_multiple_keys.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -393,6 +397,8 @@
 		396970192291CD5F003084BD /* Helper Files */ = {
 			isa = PBXGroup;
 			children = (
+				396970222291D520003084BD /* alice_to_bob_charles.age */,
+				396970232291D520003084BD /* bob_multiple_keys.txt */,
 				3969701D2291CD6B003084BD /* alice_to_bob_charles_diana.age */,
 				3969701B2291CD6B003084BD /* alice_to_bob.age */,
 				3969701A2291CD6B003084BD /* bob_keys.txt */,
@@ -493,8 +499,10 @@
 			files = (
 				396970212291CD6B003084BD /* alice_to_bob_charles_diana.age in Resources */,
 				3969701E2291CD6B003084BD /* bob_keys.txt in Resources */,
+				396970252291D521003084BD /* bob_multiple_keys.txt in Resources */,
 				396970202291CD6B003084BD /* charles_keys.txt in Resources */,
 				3969701F2291CD6B003084BD /* alice_to_bob.age in Resources */,
+				396970242291D521003084BD /* alice_to_bob_charles.age in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

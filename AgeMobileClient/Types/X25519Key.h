@@ -28,11 +28,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSData *privateKey;
 
 + (NSString *)typeString;
++ (NSArray<X25519Key *> * _Nullable)loadKeysFromDisk:(NSString *)keyString;
 
-- (instancetype)initFromDisk:(NSString *)keyString;
 - (NSData *)publicKeySHA256;
 - (NSUInteger)keyLength;
 - (NSData * _Nullable)sharedSecretWithPublicKey:(NSData *)x25519PublicKey;
+- (NSString *)output;
 
 @end
 

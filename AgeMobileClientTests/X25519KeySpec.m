@@ -48,11 +48,24 @@
 
 - (void)testCreatingKeyFromStoredKey {
     X25519Key *key = [X25519Key new];
-    NSString *storedKey = [key description];
+    NSString *storedKey = [key output];
+    NSArray<X25519Key *> *keys = [X25519Key loadKeysFromDisk:storedKey];
     
-    X25519Key *restoredKey = [[X25519Key alloc] initFromDisk:storedKey];
+    XCTAssertEqual(keys.count, 1);
+    XCTAssertEqualObjects(key, keys.firstObject);
+}
+
+- (void)testCreatingKeyFromMultipleStoredKeys {
+    X25519Key *key1 = [X25519Key new];
+    X25519Key *key2 = [X25519Key new];
+    NSString *storedKey1 = [key1 output];
+    NSString *storedKey2 = [key2 output];
+    NSString *storedKeys = [NSString stringWithFormat:@"%@\n%@", storedKey1, storedKey2];
+    NSArray<X25519Key *> *keys = [X25519Key loadKeysFromDisk:storedKeys];
     
-    XCTAssertEqualObjects(key, restoredKey);
+    XCTAssertEqual(keys.count, 2);
+    XCTAssertEqualObjects(key1, keys.firstObject);
+    XCTAssertEqualObjects(key2, keys.lastObject);
 }
 
 @end

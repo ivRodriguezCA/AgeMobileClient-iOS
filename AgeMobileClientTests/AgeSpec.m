@@ -243,7 +243,8 @@
 
 - (void)testThatItCanDecryptDataLoadedFromDiskForOneRecipient {
     NSString *keyString = [self loadKeysFileContent:@"bob_keys"];
-    X25519Key *bob = [[X25519Key alloc] initFromDisk:keyString];
+    NSArray<X25519Key *> *keys = [X25519Key loadKeysFromDisk:keyString];
+    X25519Key *bob = keys.firstObject;
     [self.keyStorage storeX25519Key:bob];
     NSString *rawInput = [self loadAgeFileContent:@"alice_to_bob"];
     
@@ -267,9 +268,36 @@
 
 - (void)testThatItCanDecryptDataLoadedFromDiskForMultipleRecipients {
     NSString *keyString = [self loadKeysFileContent:@"charles_keys"];
-    X25519Key *charles = [[X25519Key alloc] initFromDisk:keyString];
+    NSArray<X25519Key *> *keys = [X25519Key loadKeysFromDisk:keyString];
+    X25519Key *charles = keys.firstObject;
     [self.keyStorage storeX25519Key:charles];
     NSString *rawInput = [self loadAgeFileContent:@"alice_to_bob_charles_diana"];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Waiting for decryption block."];
+    
+    [self.subject X25519_decryptFromRawInput:rawInput
+                                  keyStorage:self.keyStorage
+                                  completion:^(NSData * _Nullable plaintext, NSError * _Nullable error) {
+                                      XCTAssertNil(error);
+                                      NSString *plaintextString = [[NSString alloc] initWithData:plaintext encoding:NSUTF8StringEncoding];
+                                      XCTAssertEqualObjects(@"super secret message", plaintextString);
+                                      [expectation fulfill];
+                                  }];
+    
+    [self waitForExpectationsWithTimeout:10.0 handler:^(NSError *error) {
+        if (error) {
+            XCTFail(@"Failed to wait for encryption block with error: %@", error);
+        }
+    }];
+}
+
+- (void)testThatItCanDecryptDataLoadedFromDiskForMultipleRecipientsWithRecipientHavingMultipleKeys {
+    NSString *keyString = [self loadKeysFileContent:@"bob_multiple_keys"];
+    NSArray<X25519Key *> *keys = [X25519Key loadKeysFromDisk:keyString];
+    for (X25519Key *key in keys) {
+        [self.keyStorage storeX25519Key:key];
+    }
+    NSString *rawInput = [self loadAgeFileContent:@"alice_to_bob_charles"];
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"Waiting for decryption block."];
     
