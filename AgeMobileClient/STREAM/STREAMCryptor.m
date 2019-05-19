@@ -18,24 +18,40 @@
  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import "STREAMEncryption.h"
+#import "STREAMCryptor.h"
 #include "sodium.h"
+#import "NonceEncoder.h"
 
-@implementation STREAMEncryption
+@interface STREAMCryptor ()
 
-- (NSData * _Nullable)encryptData:(NSData *)plaintextData additionalData:(NSData * _Nullable)additionalData {
-    unsigned char nonce[crypto_aead_chacha20poly1305_NPUBBYTES];
+@property (nonatomic, strong) NonceEncoder *nonceEncoder;
+
+@end
+
+@implementation STREAMCryptor
+
+- (instancetype)init {
+    if (self = [super init]) {
+        _nonceEncoder = [NonceEncoder new];
+    }
+    
+    return self;
+}
+
+- (NSData * _Nullable)encryptData:(NSData *)plaintextData
+                   additionalData:(NSData * _Nullable)additionalData
+                      isLastBlock:(BOOL)isLastBlock {
     unsigned char key[crypto_aead_chacha20poly1305_KEYBYTES];
     unsigned char ciphertext[plaintextData.length + crypto_aead_chacha20poly1305_ABYTES];
     unsigned long long ciphertext_len;
     
     crypto_aead_chacha20poly1305_keygen(key);
-    randombytes_buf(nonce, sizeof nonce);
+    NSData *nonce = [self.nonceEncoder nextIsLastBlock:isLastBlock];
     
     crypto_aead_chacha20poly1305_encrypt(ciphertext, &ciphertext_len,
                                          plaintextData.bytes, plaintextData.length,
                                          additionalData.bytes, additionalData.length,
-                                         /* nsec= */ NULL, nonce, key);
+                                         /* nsec= */ NULL, nonce.bytes, key);
     
     return [NSData dataWithBytes:ciphertext length:ciphertext_len];
 }

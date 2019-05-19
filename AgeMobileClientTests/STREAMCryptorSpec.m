@@ -19,18 +19,18 @@
  */
 
 #import <XCTest/XCTest.h>
-#import "STREAMEncryption.h"
+#import "STREAMCryptor.h"
 
-@interface STREAMEncryptionSpec : XCTestCase
+@interface STREAMCryptorSpec : XCTestCase
 
-@property (nonatomic, strong) STREAMEncryption *subject;
+@property (nonatomic, strong) STREAMCryptor *subject;
 
 @end
 
-@implementation STREAMEncryptionSpec
+@implementation STREAMCryptorSpec
 
 - (void)setUp {
-    self.subject = [STREAMEncryption new];
+    self.subject = [STREAMCryptor new];
 }
 
 - (void)tearDown {
@@ -39,7 +39,7 @@
 
 - (void)testEncryptingData {
     NSData *plaintext = [@"Hello!" dataUsingEncoding:NSUTF8StringEncoding];
-    [self.subject encryptData:plaintext additionalData:NULL];
+    [self.subject encryptData:plaintext additionalData:NULL isLastBlock:NO];
 }
 
 @end
