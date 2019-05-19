@@ -19,20 +19,41 @@
  */
 
 #import <XCTest/XCTest.h>
+#import "CryptoService.h"
+#import "CiphertextObject.h"
 
 @interface CryptoServiceSpec : XCTestCase
+
+@property (nonatomic, strong) CryptoService *subject;
 
 @end
 
 @implementation CryptoServiceSpec
 
 - (void)setUp {
+    self.subject = [CryptoService new];
 }
 
 - (void)tearDown {
+    self.subject = nil;
 }
 
-- (void)testExample {
+- (void)testThatItEncryptsData {
+    NSData *data = [@"super secret message" dataUsingEncoding:NSUTF8StringEncoding];
+    [self.subject encryptData:data completion:^(CiphertextObject * _Nonnull ciphertext) {
+        XCTAssertNotNil(ciphertext.key);
+        XCTAssertNotNil(ciphertext.ciphertext);
+    }];
+}
+
+- (void)testThatItDecryptsData {
+    NSData *data = [@"super secret message" dataUsingEncoding:NSUTF8StringEncoding];
+    [self.subject encryptData:data completion:^(CiphertextObject * _Nonnull ciphertext) {
+        [self.subject decryptData:data key:ciphertext.key completion:^(NSData * _Nonnull plaintext) {
+            NSString *plaintextString = [[NSString alloc] initWithData:plaintext encoding:NSUTF8StringEncoding];
+            XCTAssertEqualObjects(@"super secret message", plaintextString);
+        }];
+    }];
 }
 
 @end

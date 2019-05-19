@@ -39,37 +39,39 @@
 }
 
 - (NSData * _Nullable)encryptData:(NSData *)plaintextData
-                   additionalData:(NSData * _Nullable)additionalData
+                              key:(NSData *)key
                       isLastBlock:(BOOL)isLastBlock {
-    unsigned char key[crypto_aead_chacha20poly1305_KEYBYTES];
+    
     unsigned char ciphertext[plaintextData.length + crypto_aead_chacha20poly1305_ABYTES];
     unsigned long long ciphertext_len;
     
-    crypto_aead_chacha20poly1305_keygen(key);
+    
     NSData *nonce = [self.nonceEncoder nextIsLastBlock:isLastBlock];
     
     crypto_aead_chacha20poly1305_encrypt(ciphertext, &ciphertext_len,
                                          plaintextData.bytes, plaintextData.length,
-                                         additionalData.bytes, additionalData.length,
-                                         /* nsec= */ NULL, nonce.bytes, key);
+                                         /* additional_data= */ NULL, /* additional_data_length= */ 0,
+                                         /* nsec= */ NULL, nonce.bytes, key.bytes);
     
     return [NSData dataWithBytes:ciphertext length:ciphertext_len];
 }
 
-//- (NSData * _Nullable)decryptData:(NSData *)ciphertext additionalData:(NSData * _Nullable)additionalData key:(NSData *)key {
-//    unsigned char decrypted[ciphertext.length];
-//    unsigned long long decrypted_len;
-//    if (crypto_aead_chacha20poly1305_decrypt(decrypted, &decrypted_len,
-//                                             /* nsec= */ NULL,
-//                                             ciphertext.bytes, ciphertext.length,
-//                                             additionalData.bytes,
-//                                             additionalData.length,
-//                                             nonce, key) != 0) {
-//        /* message forged! */
-//    }
-//    NSData *m = [NSData dataWithBytes:decrypted length:plaintextData.length];
-//    NSString *s = [[NSString alloc] initWithData:m encoding:NSUTF8StringEncoding];
-//    NSLog(@"Decrypted %@", s);
-//}
+- (NSData * _Nullable)decryptData:(NSData *)ciphertext
+                              key:(NSData *)key
+                      isLastBlock:(BOOL)isLastBlock {
+    unsigned char decrypted[ciphertext.length];
+    unsigned long long decrypted_len;
+    NSData *nonce = [self.nonceEncoder nextIsLastBlock:isLastBlock];
+    
+    if (crypto_aead_chacha20poly1305_decrypt(decrypted, &decrypted_len,
+                                             /* nsec= */ NULL,
+                                             ciphertext.bytes, ciphertext.length,
+                                             /* additional_data= */ NULL, /* additional_data_length= */ 0,
+                                             nonce.bytes, key.bytes) != 0) {
+        return nil;
+    }
+    
+    return [NSData dataWithBytes:decrypted length:decrypted_len];
+}
 
 @end

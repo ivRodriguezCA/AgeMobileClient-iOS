@@ -20,6 +20,7 @@
 
 #import <XCTest/XCTest.h>
 #import "STREAMCryptor.h"
+#import "NSData+Helper.h"
 
 @interface STREAMCryptorSpec : XCTestCase
 
@@ -37,9 +38,24 @@
     self.subject = nil;
 }
 
-- (void)testEncryptingData {
-    NSData *plaintext = [@"Hello!" dataUsingEncoding:NSUTF8StringEncoding];
-    [self.subject encryptData:plaintext additionalData:NULL isLastBlock:NO];
+- (void)testThatItEncrypts {
+    NSData *message = [@"Hello!" dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *key = [NSData randomBytesOfLength:32];
+    NSData *ciphertext =  [self.subject encryptData:message key:key isLastBlock:YES];
+    
+    XCTAssertNotNil(ciphertext);
+}
+
+- (void)testThatItDecryptsCorrectly {
+    STREAMCryptor *cryptor = [STREAMCryptor new];
+    NSData *message = [@"Hello!" dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *key = [NSData randomBytesOfLength:32];
+    NSData *ciphertext = [cryptor encryptData:message key:key isLastBlock:YES];
+    
+    NSData *plaintext = [self.subject decryptData:ciphertext key:key isLastBlock:YES];
+    NSString *plaintextString = [[NSString alloc] initWithData:plaintext encoding:NSUTF8StringEncoding];
+    
+    XCTAssertEqualObjects(@"Hello!", plaintextString);
 }
 
 @end

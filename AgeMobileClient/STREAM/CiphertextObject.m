@@ -23,18 +23,27 @@
 @interface CiphertextObject ()
 
 @property (nonatomic, strong) NSData *key;
-@property (nonatomic, strong) NSData *ciphertext;
+@property (nonatomic, strong) NSArray<NSData *> *ciphertextBlocks;
 
 @end
 
 @implementation CiphertextObject
 
-+ (instancetype)objectWithKey:(NSData *)key andCiphertext:(NSData *)ciphertext {
++ (instancetype)objectWithKey:(NSData *)key andCiphertext:(NSArray<NSData *> *)ciphertextBlocks {
     CiphertextObject *obj = [CiphertextObject new];
     obj.key = key;
-    obj.ciphertext = ciphertext;
+    obj.ciphertextBlocks = ciphertextBlocks;
     
     return obj;
+}
+
+- (NSData *)ciphertext {
+    NSMutableData *data = [NSMutableData new];
+    for (NSData *d in self.ciphertextBlocks) {
+        [data appendData:d];
+    }
+    
+    return [data copy];
 }
 
 @end

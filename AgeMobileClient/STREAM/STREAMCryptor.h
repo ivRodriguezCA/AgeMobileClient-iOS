@@ -26,7 +26,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface STREAMCryptor : NSObject
 
 - (NSData * _Nullable)encryptData:(NSData *)plaintextData
-                   additionalData:(NSData * _Nullable)additionalData
+                              key:(NSData *)key
+                      isLastBlock:(BOOL)isLastBlock;
+
+- (NSData * _Nullable)decryptData:(NSData *)ciphertext
+                              key:(NSData *)key
                       isLastBlock:(BOOL)isLastBlock;
 
 @end

@@ -20,9 +20,17 @@
 
 #import <Foundation/Foundation.h>
 
+@class CiphertextObject;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CryptoService : NSObject
+
+- (void)encryptData:(NSData *)plaintext
+         completion:(void (^)(CiphertextObject * ciphertext))completion;
+- (void)decryptData:(NSData *)ciphertext
+                key:(NSData *)key
+         completion:(void (^)(NSData *plaintext))completion;
 
 @end
 

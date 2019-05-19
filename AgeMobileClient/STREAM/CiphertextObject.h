@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSData *key;
 @property (nonatomic, strong, readonly) NSData *ciphertext;
 
-+ (instancetype)objectWithKey:(NSData *)key andCiphertext:(NSData *)ciphertext;
++ (instancetype)objectWithKey:(NSData *)key andCiphertext:(NSArray<NSData *> *)ciphertextBlocks;
 
 @end
 

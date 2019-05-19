@@ -19,7 +19,85 @@
  */
 
 #import "CryptoService.h"
+#include "sodium.h"
+#import "STREAMCryptor.h"
+#import "CiphertextObject.h"
+
+// Blocks are of size 64KiB. 1 KiB = 1,024 KB.
+// More info: https://en.wikipedia.org/wiki/Kibibyte
+#define kSTREAMBlockSize 64.0*65536000.0
 
 @implementation CryptoService
+
+#pragma mark - Public
+
+- (void)encryptData:(NSData *)plaintext
+         completion:(void (^)(CiphertextObject * ciphertext))completion {
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        unsigned char rawKey[crypto_aead_chacha20poly1305_KEYBYTES];
+        crypto_aead_chacha20poly1305_keygen(rawKey);
+        NSData *key = [NSData dataWithBytes:rawKey length:crypto_aead_chacha20poly1305_KEYBYTES];
+        
+        STREAMCryptor *cryptor = [STREAMCryptor new];
+        NSArray<NSData *> *blocks = [self divideDataInBlocks:plaintext];
+        NSMutableArray<NSData *> *ciphertextBlocks = [NSMutableArray new];
+        for (NSUInteger idx = 0; idx < blocks.count; idx++) {
+            NSData *data = blocks[idx];
+            BOOL isLastBlock = idx == blocks.count - 1;
+            NSData *ciphertextBlock = [cryptor encryptData:data key:key isLastBlock:isLastBlock];
+            [ciphertextBlocks addObject:ciphertextBlock];
+        }
+        
+        CiphertextObject *ciphertext = [CiphertextObject objectWithKey:key andCiphertext:[ciphertextBlocks copy]];
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            completion(ciphertext);
+        });
+    });
+}
+
+- (void)decryptData:(NSData *)ciphertext
+                key:(NSData *)key
+         completion:(void (^)(NSData *plaintext))completion {
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        STREAMCryptor *cryptor = [STREAMCryptor new];
+        NSArray<NSData *> *blocks = [self divideDataInBlocks:ciphertext];
+        NSMutableArray<NSData *> *plaintextBlocks = [NSMutableArray new];
+        for (NSUInteger idx = 0; idx < blocks.count; idx++) {
+            NSData *data = blocks[idx];
+            BOOL isLastBlock = idx == blocks.count - 1;
+            NSData *plaintextBlock = [cryptor decryptData:data key:key isLastBlock:isLastBlock];
+            [plaintextBlocks addObject:plaintextBlock];
+        }
+        NSMutableData *plaintext = [NSMutableData new];
+        for (NSData *d in plaintextBlocks) {
+            [plaintext appendData:d];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            completion([plaintext copy]);
+        });
+    });
+}
+
+#pragma mark - Private
+
+- (NSArray<NSData *> *)divideDataInBlocks:(NSData *)data {
+    if (data.length < kSTREAMBlockSize) {
+        return @[data];
+    }
+    
+    NSMutableArray *blocks = [NSMutableArray new];
+    NSRange range;
+    for (NSUInteger loc = 0; loc < data.length; loc += kSTREAMBlockSize) {
+        NSUInteger len = kSTREAMBlockSize;
+        if (loc + kSTREAMBlockSize > data.length) {
+            len = data.length - loc;
+        }
+        range = NSMakeRange(loc, len);
+        NSData *subData = [data subdataWithRange:range];
+        [blocks addObject:subData];
+    }
+    return [blocks copy];
+}
 
 @end

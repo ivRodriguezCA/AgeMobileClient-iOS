@@ -24,6 +24,7 @@
 		396970012290BFA0003084BD /* NonceEncoderSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 396970002290BFA0003084BD /* NonceEncoderSpec.m */; };
 		396970042290DEF2003084BD /* CryptoService.m in Sources */ = {isa = PBXBuildFile; fileRef = 396970032290DEF2003084BD /* CryptoService.m */; };
 		396970062290DF12003084BD /* CryptoServiceSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 396970052290DF12003084BD /* CryptoServiceSpec.m */; };
+		396970092290E7C7003084BD /* CiphertextObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 396970082290E7C7003084BD /* CiphertextObject.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -127,6 +128,8 @@
 		396970022290DEF2003084BD /* CryptoService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CryptoService.h; sourceTree = "<group>"; };
 		396970032290DEF2003084BD /* CryptoService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CryptoService.m; sourceTree = "<group>"; };
 		396970052290DF12003084BD /* CryptoServiceSpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CryptoServiceSpec.m; sourceTree = "<group>"; };
+		396970072290E7C7003084BD /* CiphertextObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CiphertextObject.h; sourceTree = "<group>"; };
+		396970082290E7C7003084BD /* CiphertextObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CiphertextObject.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -344,6 +347,8 @@
 				39696FFE2290B147003084BD /* NonceEncoder.m */,
 				396970022290DEF2003084BD /* CryptoService.h */,
 				396970032290DEF2003084BD /* CryptoService.m */,
+				396970072290E7C7003084BD /* CiphertextObject.h */,
+				396970082290E7C7003084BD /* CiphertextObject.m */,
 			);
 			path = STREAM;
 			sourceTree = "<group>";
@@ -448,6 +453,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				396970092290E7C7003084BD /* CiphertextObject.m in Sources */,
 				39696EED228FD90E003084BD /* MainViewController.m in Sources */,
 				39696F5E228FED93003084BD /* NSData+Helper.m in Sources */,
 				39696FFA22909F29003084BD /* STREAMCryptor.m in Sources */,
