@@ -129,11 +129,6 @@
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"Waiting for decryption block."];
     
-    NSLog(@"\n");
-    NSLog(@"Alice's Pulblic Key Raw: %@", alice.publicKey);
-    NSLog(@"Alice's Pulblic Key RawBas64Encoded: %@", [alice.publicKey rawBase64Encoded]);
-    NSLog(@"\n");
-    
     [sender X25519_encryptData:data
                     publicKeys:@[bob.publicKey]
                      X25519Key:alice completion:^(AgeObject *ageObject) {

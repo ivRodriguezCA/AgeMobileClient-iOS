@@ -62,7 +62,7 @@
     XCTestExpectation *expectation = [self expectationWithDescription:@"Waiting for decryption block."];
     
     [self.subject encryptData:data completion:^(CiphertextObject * _Nonnull ciphertext) {
-        [self.subject decryptData:data key:ciphertext.key completion:^(NSData * _Nullable plaintext, NSError * _Nullable error) {
+        [self.subject decryptData:ciphertext.ciphertext key:ciphertext.key completion:^(NSData * _Nullable plaintext, NSError * _Nullable error) {
             NSString *plaintextString = [[NSString alloc] initWithData:plaintext encoding:NSUTF8StringEncoding];
             XCTAssertNil(error);
             XCTAssertEqualObjects(@"super secret message", plaintextString);

@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSString (Helper)
 
 - (NSData *)dataFromRawBase64Encoded;
+- (NSData *)dataFromHexString;
 
 @end
 

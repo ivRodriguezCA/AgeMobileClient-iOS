@@ -129,12 +129,10 @@ NS_ASSUME_NONNULL_END
                 }
                 // For X25519 keys, the 4th element is the sender's public key.
                 NSString *rawBase64SenderPublicKey = recipientComponents[3];
-                NSLog(@"\nrawBase64SenderPublicKey: %@", rawBase64SenderPublicKey);
                 senderPublicKey = [rawBase64SenderPublicKey dataFromRawBase64Encoded];
                 // For X25519 keys, the line right after the recipient data is the encrypted file key.
                 idx++;
                 NSString *rawBase64EncryptedKey = lines[idx];
-                NSLog(@"\nrawBase64EncryptedKey: %@", rawBase64EncryptedKey);
                 encryptedKey = [rawBase64EncryptedKey dataFromRawBase64Encoded];
             }
             
@@ -143,7 +141,7 @@ NS_ASSUME_NONNULL_END
             
         } else {
             NSString *ciphertextString = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-            NSData *ciphertext = [ciphertextString dataUsingEncoding:NSUTF8StringEncoding];
+            NSData *ciphertext = [ciphertextString dataFromHexString];
             // If any of these values is missing something went wrong.
             if (X25519key == nil || senderPublicKey == nil || encryptedKey == nil || ciphertext == nil) {
                 return nil;
@@ -182,14 +180,14 @@ NS_ASSUME_NONNULL_END
         [desc appendFormat:@"\n%@", rpt.rawBase64EncryptedKey];
     }
     [desc appendFormat:@"\n%@", kCiphertextSeparator];
-    [desc appendFormat:@"\n%@", [self prittyPrintData:self.ciphertext]];
+    [desc appendFormat:@"\n%@", [self prettyPrintData:self.ciphertext]];
     
     return [desc copy];
 }
 
 #pragma mark - Private
 
-- (NSString *)prittyPrintData:(NSData *)data {
+- (NSString *)prettyPrintData:(NSData *)data {
     NSString *dataString = [NSString stringWithFormat:@"%@", data];
     dataString = [dataString stringByReplacingOccurrencesOfString:@"<" withString:@""];
     dataString = [dataString stringByReplacingOccurrencesOfString:@">" withString:@""];

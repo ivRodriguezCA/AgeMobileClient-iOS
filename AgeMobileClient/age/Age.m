@@ -69,7 +69,7 @@
         return;
     }
     
-    NSData *encryptionKey = [obj.X25519key sharedSecretWithPublicKey:obj.senderPublicKey];
+    NSData *encryptionKey = [[obj.X25519key sharedSecretWithPublicKey:obj.senderPublicKey] sha256Digest];
     NSData *fileKey = [self chacha20poly1305Decrypt:obj.encryptedKey key:encryptionKey];
     if (fileKey == nil) {
         NSError *error = [NSError errorWithDomain:@"com.ivrodriguez.AgeMobileClient" code:001 userInfo:@{NSLocalizedDescriptionKey: @"Failed to decrypt file key."}];

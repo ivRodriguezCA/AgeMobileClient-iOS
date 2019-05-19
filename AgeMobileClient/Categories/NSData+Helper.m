@@ -63,7 +63,7 @@
     return [NSData dataWithBytes:digestData length:CC_SHA256_DIGEST_LENGTH];
 }
 
-// Method modified from https://stackoverflow.com/a/9084784
+// Taken from https://stackoverflow.com/a/9084784
 - (NSString *)toHexString {
     if (self.length == 0) {
         return [NSString new];

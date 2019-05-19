@@ -28,11 +28,45 @@
 // Even though the RFC http://www.faqs.org/rfcs/rfc4648.html
 // on section 3.2 says that it's not required
 - (NSData *)dataFromRawBase64Encoded {
-    NSUInteger paddedLength = self.length + (self.length % 3);
-    NSString *paddedString = [self stringByPaddingToLength:paddedLength withString:@"=" startingAtIndex:0];
-    paddedString = [paddedString stringByReplacingOccurrencesOfString:@"_" withString:@"/"];
-    paddedString = [paddedString stringByReplacingOccurrencesOfString:@"-" withString:@"+"];
-    return [[NSData alloc] initWithBase64EncodedString:paddedString options:0];
+    NSString *base64EncodedString = [self stringByReplacingOccurrencesOfString:@"_" withString:@"/"];
+    base64EncodedString = [base64EncodedString stringByReplacingOccurrencesOfString:@"-" withString:@"+"];
+    switch (base64EncodedString.length % 4) {
+        case 2:
+            base64EncodedString = [base64EncodedString stringByAppendingString:@"=="];
+            break;
+        case 3:
+            base64EncodedString = [base64EncodedString stringByAppendingString:@"="];
+            break;
+        default:
+            break;
+    }
+    
+//    return [base64EncodedString dataFromBase64String];
+    return [[NSData alloc] initWithBase64EncodedString:base64EncodedString
+                                               options:NSDataBase64DecodingIgnoreUnknownCharacters];
+}
+
+// Taken from https://stackoverflow.com/a/45708574
+- (NSData *)dataFromHexString {
+    NSString *string = self;
+    if([string length] % 2 == 1){
+        string = [@"0" stringByAppendingString:string];
+    }
+    
+    const char *chars = [string UTF8String];
+    int i = 0, len = (int)[string length];
+    
+    NSMutableData *data = [NSMutableData dataWithCapacity:len / 2];
+    char byteChars[3] = {'\0','\0','\0'};
+    unsigned long wholeByte;
+    
+    while (i < len) {
+        byteChars[0] = chars[i++];
+        byteChars[1] = chars[i++];
+        wholeByte = strtoul(byteChars, NULL, 16);
+        [data appendBytes:&wholeByte length:1];
+    }
+    return data;
 }
 
 @end
