@@ -25,6 +25,7 @@
 		396970042290DEF2003084BD /* CryptoService.m in Sources */ = {isa = PBXBuildFile; fileRef = 396970032290DEF2003084BD /* CryptoService.m */; };
 		396970062290DF12003084BD /* CryptoServiceSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 396970052290DF12003084BD /* CryptoServiceSpec.m */; };
 		396970092290E7C7003084BD /* CiphertextObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 396970082290E7C7003084BD /* CiphertextObject.m */; };
+		3969700D2290F120003084BD /* Age.m in Sources */ = {isa = PBXBuildFile; fileRef = 3969700C2290F120003084BD /* Age.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -130,6 +131,8 @@
 		396970052290DF12003084BD /* CryptoServiceSpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CryptoServiceSpec.m; sourceTree = "<group>"; };
 		396970072290E7C7003084BD /* CiphertextObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CiphertextObject.h; sourceTree = "<group>"; };
 		396970082290E7C7003084BD /* CiphertextObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CiphertextObject.m; sourceTree = "<group>"; };
+		3969700B2290F120003084BD /* Age.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Age.h; sourceTree = "<group>"; };
+		3969700C2290F120003084BD /* Age.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Age.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +175,7 @@
 		39696EE7228FD90E003084BD /* AgeMobileClient */ = {
 			isa = PBXGroup;
 			children = (
+				3969700A2290F0F7003084BD /* age */,
 				39696FF722909F09003084BD /* STREAM */,
 				39696F58228FECFB003084BD /* Categories */,
 				39696F11228FE2C1003084BD /* Libraries */,
@@ -353,6 +357,15 @@
 			path = STREAM;
 			sourceTree = "<group>";
 		};
+		3969700A2290F0F7003084BD /* age */ = {
+			isa = PBXGroup;
+			children = (
+				3969700B2290F120003084BD /* Age.h */,
+				3969700C2290F120003084BD /* Age.m */,
+			);
+			path = age;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -453,6 +466,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3969700D2290F120003084BD /* Age.m in Sources */,
 				396970092290E7C7003084BD /* CiphertextObject.m in Sources */,
 				39696EED228FD90E003084BD /* MainViewController.m in Sources */,
 				39696F5E228FED93003084BD /* NSData+Helper.m in Sources */,
